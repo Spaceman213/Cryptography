@@ -1,0 +1,160 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+#p1 {
+    font-size: 24px;
+    line-height: 60px;
+    transition: 0.3s color;
+}
+#p1:hover {
+    color: #0C3953;
+}
+#p2 {
+    font-size: 16px;
+    line-height: 60px;
+}
+#p3 {
+    font-size: 16px;
+    line-height: 60px;
+}
+p {
+    font-family: Arial;
+    color: #ffffff;
+    font-weight: 900;
+    background-color: #5f9EA0;
+    float: left;
+    padding: 0px 20px;
+}
+
+#Message-Text-Box {
+    padding: 10px;
+    float: left;
+    border-radius: 6px 6px 6px 6px;
+    outline: none;
+    border: none;
+    margin-top: 12px;
+    font-weight: 600;
+    color: #444444;
+}
+
+#Key-Text-Box {
+    padding: 10px;
+    float: left;
+    border-radius: 6px 6px 6px 6px;
+    outline: none;
+    border: none;
+    margin-top: 12px;
+    font-weight: 600;
+    color: #444444;
+}
+
+#Pad-Between {
+    font-size: 2px;
+    color: #FFFFFF;
+    background-color: #FFFFFF;
+}
+#hello {
+    float: left;
+    background-color: orange;
+}
+#Crypt-Button {
+    height: 46px;
+    margin-top: 6px;
+    margin-left: 32px;
+    padding: 0px 12px;
+    background: #0C3953;
+	color: #ffffff;
+	border: none;
+	font: Arial;
+    font-size: 16px;
+	cursor: pointer;
+	outline: inherit;
+    font-weight: 900;
+    float: left;
+    border-radius: 10px 10px 10px 10px;
+    transition: 0.3s background-color;
+}
+#Crypt-Button:hover {
+    background: #24516B;
+}
+#Key-Help-Button {
+    margin-top: 16px;
+    margin-left: 10px;
+    padding: 4px 8px;
+    background: #0C3953;
+	color: #ffffff;
+	border: none;
+	font: Arial;
+    font-size: 16px;
+	cursor: pointer;
+	outline: inherit;
+    font-weight: 900;
+    float: left;
+    border-radius: 10px 10px 10px 10px;
+    transition: 0.3s background-color;
+}
+#Key-Help-Button:hover {
+    background: #24516B;
+}
+nav {
+    width: 100%;
+    height: 60px;
+    background-color: #5f9EA0;
+}
+
+nav ul {
+    float: left;
+}
+nav ul li {
+    float: left;
+    list-style: none;
+    position: relative;
+}
+
+nav ul li a {
+    display: block;
+    padding: 22px 14px;
+    font-family: Arial;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 900;
+    text-decoration: none;
+    transition: 0.3s color;
+}
+nav ul li a:hover {
+    color: #0C3953;
+}
+
+nav ul li ul {
+    display: none;
+    position: absolute;
+    background-color: #5f9EA0;
+    padding: 10px;
+    border-radius: 0px 0px 10px 10px;
+}
+nav ul li ul.show-algo-dropdown {
+    display: block;
+}
+nav ul li ul.show-speed-dropdown {
+    display: block;
+}
+nav ul li ul.show-crypt-dropdown {
+    display: block;
+}
+
+nav ul li ul li {
+    width: 180px;
+    border-radius: 10px;
+}
+
+nav ul li ul li a {
+    padding: 8px 14px;
+    font-size: 14px;
+    transition: 0.3s background-color;
+}
+nav ul li ul li a:hover{
+    color: #ffffff;
+    background-color: #0C3953;
+}

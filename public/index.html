@@ -1,43 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
+  <script src = "browserfunctions.js"></script>
   <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
-
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <title>React App</title>
+    <link rel = "stylesheet" type = "text/css" href = "style.css"></link>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
+    <nav>
+      <p id = "p1" onclick = "location.reload()">Cryptography Visualizer</p>
+      <ul>
+        <p id = "p2">Enter Text:</p>
+        <input type="text" name="name" id="Message-Text-Box" value=""></input>
+        <li><a href = "#" id = "Algorithm-Button" onclick="handleAlgorithmDropdown()">Algorithm</a>
+          <ul id = "Algorithm-Dropdown-Container">
+            <li><a href = "#" class = "Algorithm-Dropdown" onclick="handleCCclick()">Caesar Cipher</a></li>
+            <li><a href = "#" class = "Algorithm-Dropdown" onclick="handleMCclick()">Monoalphaetic Cipher</a></li>
+            <li><a href = "#" class = "Algorithm-Dropdown" onclick="handleHCclick()">Hill Cipher</a></li>
+          </ul>
+        </li>
+        <li><a href = "#" id = "Speed-Button" onclick="handleSpeedDropdown()">Speed: Fast</a>
+          <ul id = "Speed-Dropdown-Container">
+            <li><a href = "#" class = "Speed-Dropdown" onclick="handleSFclick()">Fast</a></li>
+            <li><a href = "#" class = "Speed-Dropdown" onclick="handleSMclick()">Medium</a></li>
+            <li><a href = "#" class = "Speed-Dropdown" onclick="handleSSclick()">Slow</a></li>
+          </ul>
+        </li>
+        <li><a href = "#" id = "Crypt-Selection-Button" onclick="handleCryptDropdown()">Encrypt</a>
+          <ul id = "Crypt-Dropdown-Container">
+            <li><a href = "#" class = "Crypt-Dropdown" onclick="handleCEclick()">Encrypt</a></li>
+            <li><a href = "#" class = "Crypt-Dropdown" onclick="handleCDclick()">Decrypt</a></li>
+          </ul>
+        </li>
+        <p id = "p3">Key:</p>
+        <input type="text" name="name" id="Key-Text-Box" value="Random"></input>
+        <button id = "Key-Help-Button" onclick="handleKeyHelpButton()">?</button>
+        <button id = "Crypt-Button" onclick="handleCryptButton()">Encrypt!</button>
+      </ul>
+    </nav>
+    <div id = "Pad-Between">.</div>
     <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
-
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
+    <div id="Key-Help-Pop-Up">This IS the pop up</div>
   </body>
 </html>
