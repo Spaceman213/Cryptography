@@ -1,5 +1,9 @@
+// Variables
 var algorithmType = 1;
 
+/*
+ * Algorithm Drop Down Menu
+ */
 function handleAlgorithmDropdown() {
     var element = document.getElementById("Algorithm-Dropdown-Container");
     if (!element.classList.contains("show-algo-dropdown")) {
@@ -10,14 +14,19 @@ function handleAlgorithmDropdown() {
 }
 function handleCCclick() {
     algorithmType = 1;
+    document.getElementById("Key-Help-Pop-Up").innerHTML = "Key is a number between 0 and 26";
 }
 function handleMCclick() {
     algorithmType = 2;
+    document.getElementById("Key-Help-Pop-Up").innerHTML = "Key is 26 letters, no repeats";
 }
 function handleHCclick() {
     algorithmType = 3;
+    document.getElementById("Key-Help-Pop-Up").innerHTML = "Key format: Letters A-Z, after each letter put number n (between 1-9) and then n unique symbols (no space) \nExample: A 2 &* B 3 e-D C 1 , ...";
 }
-
+/*
+ * Speed Drop Down Menu
+ */
 function handleSpeedDropdown() {
     var element = document.getElementById("Speed-Dropdown-Container");
     if (!element.classList.contains("show-speed-dropdown")) {
@@ -38,6 +47,10 @@ function handleSSclick() {
     var element = document.getElementById("Speed-Button");
     element.innerHTML = "Speed: Slow  ";
 }
+
+/*
+ * Encrypt/Decrypt Drop Down Menu
+ */
 function handleCryptDropdown() {
     var element = document.getElementById("Crypt-Dropdown-Container");
     if (!element.classList.contains("show-crypt-dropdown")) {
@@ -58,6 +71,9 @@ function handleCDclick() {
     element = document.getElementById("Crypt-Button");
     element.innerHTML = "Decrypt!";
 }
+/*
+ * Encryption/Decryption Algorithm Implementations
+ */
 function caesarCipher(text, shift) {
     var encrypt_text = '';
     for(let i = 0; i < text.length; i++) {
@@ -65,6 +81,24 @@ function caesarCipher(text, shift) {
     }
     return encrypt_text;
 }
+
+/*
+ * Show the pop-up for the help button
+ */
+function handleKeyHelpButton() {
+    var element = document.getElementById("Key-Help-Pop-Up");
+    if (!element.classList.contains("show")) {
+        element.classList.add("show");
+    }
+    else {
+        element.classList.remove("show");
+    }
+}
+
+/*
+ * Encrypt/Decrypt Button 
+ *   Starts main program functionality
+ */
 
 function handleCryptButton() {
     var textInput = document.getElementById("Message-Text-Box").value;
@@ -85,7 +119,9 @@ function handleCryptButton() {
     document.getElementById("hello").innerHTML = newText;
 }
 
-
+/*
+ * Event Listener for the entire website
+ */
 document.addEventListener("click", function(event){
     if (!(event.target.id == "Algorithm-Button")) {
         var element = document.getElementById("Algorithm-Dropdown-Container");

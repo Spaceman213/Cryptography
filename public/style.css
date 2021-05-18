@@ -30,7 +30,9 @@ p {
 
 #Message-Text-Box {
     padding: 10px;
+    padding-right:20px;
     float: left;
+    width: 300px;
     border-radius: 6px 6px 6px 6px;
     outline: none;
     border: none;
@@ -42,6 +44,7 @@ p {
 #Key-Text-Box {
     padding: 10px;
     float: left;
+    width: 75px;
     border-radius: 6px 6px 6px 6px;
     outline: none;
     border: none;
@@ -98,6 +101,26 @@ p {
 #Key-Help-Button:hover {
     background: #24516B;
 }
+
+#Key-Help-Pop-Up {
+    visibility: hidden;
+}
+#Key-Help-Pop-Up.show {
+    font-family: Arial;
+    font-size: 12px;
+    padding: 6px;
+    visibility: visible;
+    color: #0C3953;
+    background-color: #A9A9A9;
+    width: 150px;
+    position: absolute;
+    top: 55px;
+    left: 1120px;
+    opacity: 0.9;
+    font-weight: 600;
+    border-radius: 10px 10px 10px 10px;
+}
+
 nav {
     width: 100%;
     height: 60px;
