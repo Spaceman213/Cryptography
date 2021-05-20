@@ -1,0 +1,63 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.flip-square {
+    position: absolute;
+    width: 60px;
+    height: 40px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.flip-board {
+    width: 60px;
+    height: 80px;
+    background-color: red;
+    
+    position: absolute;
+    left: 100px;
+    top: 100px;
+}
+.flip-part {
+    position: relative;
+    float: left;
+    width: 60px;
+    height: 40px;
+    background-color: green;
+}
+.flip-A-t {
+    z-index: 3;
+}
+.flip-A-b {
+    z-index: 4;
+}
+.flip-B-t {
+    z-index: 1;
+}
+.flip-B-b {
+    z-index: 2;
+}

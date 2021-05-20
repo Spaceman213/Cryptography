@@ -101,6 +101,8 @@ function handleKeyHelpButton() {
  */
 
 function handleCryptButton() {
+    //alert("Test");
+    //$("#Title-Button").html("Test!");
     var textInput = document.getElementById("Message-Text-Box").value;
     var newText = "";
     switch(algorithmType) {
@@ -116,7 +118,76 @@ function handleCryptButton() {
             break;
     }
     // Update new Text
-    document.getElementById("hello").innerHTML = newText;
+    //document.getElementById("hello").innerHTML = newText;
+}
+
+
+// Need to make double array in the future
+// Store based on index (stack), last element is the highest up on stack
+var flipElementsState = [];
+var characterList = ["purple", "blue", "green", "yellow", "orange", "red", "white", "percent", "degree",
+"qm", "bslash", "fslash", "rbr", "lbr", "per", "com", "dquote", "squote", "mul", "colon", "sc", "eq", "and", "add", "us", "min",
+"car", "rpar", "lpar", "cash", "hash", "as", "ex", "0", "9", "8", "7", "6", "5", "4", "3", "2", "1", "Z", "Y", "X", "W", "V",
+"U", "T", "S", "R", "Q", "P", "O", "N", "M", "L", "K", "J", "I", "H", "G", "F", "E", "D", "C", "B", "A"];
+
+function createElementIdAndPopulateState() {
+    for (var i = 0; i < characterList.length; i++) {
+        var id1 = "t_" + characterList[i] + "_0_0";
+        var id2 = "b_" + characterList[i] + "_0_0";
+        flipElementsState.push(id1);
+        flipElementsState.push(id2);
+    }
+}
+
+/*
+ * Function for initializing the React Flip Board
+ */
+function setFlipBoardElementLocations() {
+    createElementIdAndPopulateState();
+    console.log("Array: " + flipElementsState.toString());
+    for (var i = 0; i < flipElementsState.length-1; i+=2) {
+        document.getElementById(flipElementsState[flipElementsState.length-2-i]).style.left = "10px";
+        document.getElementById(flipElementsState[flipElementsState.length-2-i]).style.top = "100px";
+
+        document.getElementById(flipElementsState[flipElementsState.length-1-i]).style.left = "10px";
+        document.getElementById(flipElementsState[flipElementsState.length-1-i]).style.top = "140px";
+    }
+    setFlipBoardElementsIndexZ();
+}
+/*
+ * Function that will layer the React Elements based on the current positioning in the state array
+ */
+function setFlipBoardElementsIndexZ() {
+    for (var i = 1; i <= flipElementsState.length; i++) {
+        document.getElementById(flipElementsState[i-1]).style.zIndex = i;
+    }
+}
+function shiftZState() {
+    var temp1 = flipElementsState[flipElementsState.length-2];
+    var temp2 = flipElementsState[flipElementsState.length-1];
+    for (var i = flipElementsState.length-1; i > 1; i--) {
+        flipElementsState[i] = flipElementsState[i-2];
+    }
+    flipElementsState[0] = temp1;
+    flipElementsState[1] = temp2;
+}
+
+function setIndexZAfterFlip() {
+    var topID = "#" + flipElementsState[flipElementsState.length-2];
+    var bottomID = "#" + flipElementsState[flipElementsState.length-1];
+    var speed = 1; // make divisible by 4
+    $(topID).animate({'top':'140px'}, speed, function() {
+        $(topID).animate({'top':'180px'}, speed);
+        $(bottomID).animate({'top':'180px'}, speed, function() {
+            shiftZState();
+            setFlipBoardElementsIndexZ();
+            $(topID).animate({'top':'100px'}, (speed));
+            $(bottomID).animate({'top':'140px'}, (speed));
+            setTimeout(function(){
+                setIndexZAfterFlip();
+            }, 200);
+        });
+    });
 }
 
 /*
@@ -141,4 +212,7 @@ document.addEventListener("click", function(event){
             element.classList.remove("show-crypt-dropdown");
         }
     }
+});
+document.addEventListener("DOMContentLoaded", function() {
+    setFlipBoardElementLocations();
 });

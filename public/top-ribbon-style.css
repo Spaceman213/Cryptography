@@ -2,45 +2,36 @@
     margin: 0;
     padding: 0;
 }
-
-#p1 {
+#Title-Button {
     font-size: 24px;
     line-height: 60px;
     transition: 0.3s color;
 }
-#p1:hover {
+#Title-Button:hover {
     color: #0C3953;
 }
-#p2 {
-    font-size: 16px;
-    line-height: 60px;
-}
-#p3 {
-    font-size: 16px;
-    line-height: 60px;
-}
-p {
-    font-family: Arial;
-    color: #ffffff;
-    font-weight: 900;
-    background-color: #5f9EA0;
-    float: left;
-    padding: 0px 20px;
-}
 
+#Enter-Text {
+    font-size: 16px;
+    line-height: 60px;
+}
 #Message-Text-Box {
     padding: 10px;
-    padding-right:20px;
+    padding-right: 20px;
+    margin-top: 12px;
     float: left;
     width: 300px;
     border-radius: 6px 6px 6px 6px;
     outline: none;
     border: none;
-    margin-top: 12px;
     font-weight: 600;
     color: #444444;
 }
 
+#Key {
+    font-size: 16px;
+    line-height: 60px;
+}
 #Key-Text-Box {
     padding: 10px;
     float: left;
@@ -53,15 +44,44 @@ p {
     color: #444444;
 }
 
-#Pad-Between {
-    font-size: 2px;
-    color: #FFFFFF;
-    background-color: #FFFFFF;
-}
-#hello {
+#Key-Help-Button {
+    margin-top: 16px;
+    margin-left: 10px;
+    padding: 4px 8px;
+    background: #0C3953;
+	color: #ffffff;
+	border: none;
+	font: Arial;
+    font-size: 16px;
+	cursor: pointer;
+	outline: inherit;
+    font-weight: 900;
     float: left;
-    background-color: orange;
+    border-radius: 10px 10px 10px 10px;
+    transition: 0.3s background-color;
 }
+#Key-Help-Button:hover {
+    background: #24516B;
+}
+#Key-Help-Pop-Up {
+    visibility: hidden;
+}
+#Key-Help-Pop-Up.show {
+    font-family: Arial;
+    font-size: 12px;
+    padding: 6px;
+    visibility: visible;
+    color: #0C3953;
+    background-color: #A9A9A9;
+    width: 150px;
+    position: absolute;
+    top: 55px;
+    left: 1120px;
+    opacity: 0.9;
+    font-weight: 600;
+    border-radius: 10px 10px 10px 10px;
+}
+
 #Crypt-Button {
     height: 46px;
     margin-top: 6px;
@@ -82,43 +102,20 @@ p {
 #Crypt-Button:hover {
     background: #24516B;
 }
-#Key-Help-Button {
-    margin-top: 16px;
-    margin-left: 10px;
-    padding: 4px 8px;
-    background: #0C3953;
-	color: #ffffff;
-	border: none;
-	font: Arial;
-    font-size: 16px;
-	cursor: pointer;
-	outline: inherit;
-    font-weight: 900;
-    float: left;
-    border-radius: 10px 10px 10px 10px;
-    transition: 0.3s background-color;
-}
-#Key-Help-Button:hover {
-    background: #24516B;
+
+#Pad-Between {
+    font-size: 2px;
+    color: #FFFFFF;
+    background-color: #FFFFFF;
 }
 
-#Key-Help-Pop-Up {
-    visibility: hidden;
-}
-#Key-Help-Pop-Up.show {
+p {
     font-family: Arial;
-    font-size: 12px;
-    padding: 6px;
-    visibility: visible;
-    color: #0C3953;
-    background-color: #A9A9A9;
-    width: 150px;
-    position: absolute;
-    top: 55px;
-    left: 1120px;
-    opacity: 0.9;
-    font-weight: 600;
-    border-radius: 10px 10px 10px 10px;
+    color: #ffffff;
+    font-weight: 900;
+    background-color: #5f9EA0;
+    float: left;
+    padding: 0px 20px;
 }
 
 nav {
@@ -130,6 +127,7 @@ nav {
 nav ul {
     float: left;
 }
+
 nav ul li {
     float: left;
     list-style: none;
@@ -180,4 +178,10 @@ nav ul li ul li a {
 nav ul li ul li a:hover{
     color: #ffffff;
     background-color: #0C3953;
+}
+
+#test{
+    font-size: 100px;
+    color: red;
+    background-color: blue;
 }

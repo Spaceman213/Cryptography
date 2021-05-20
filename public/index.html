@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src = "browserfunctions.js"></script>
   <head>
-    <link rel = "stylesheet" type = "text/css" href = "style.css"></link>
+    <link rel = "stylesheet" type = "text/css" href = "top-ribbon-style.css"></link>
+    <link rel = "stylesheet" type = "text/css" href = "flip-board-style.css"></link>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <nav>
-      <p id = "p1" onclick = "location.reload()">Cryptography Visualizer</p>
+      <p id = "Title-Button" onclick = "location.reload()">Cryptography Visualizer</p>
       <ul>
-        <p id = "p2">Enter Text:</p>
+        <p id = "Enter-Text">Enter Text:</p>
         <input type="text" name="name" id="Message-Text-Box" value=""></input>
         <li><a href = "#" id = "Algorithm-Button" onclick="handleAlgorithmDropdown()">Algorithm</a>
           <ul id = "Algorithm-Dropdown-Container">
@@ -31,14 +33,26 @@
             <li><a href = "#" class = "Crypt-Dropdown" onclick="handleCDclick()">Decrypt</a></li>
           </ul>
         </li>
-        <p id = "p3">Key:</p>
+        <p id = "Key">Key:</p>
         <input type="text" name="name" id="Key-Text-Box" value="Random"></input>
         <button id = "Key-Help-Button" onclick="handleKeyHelpButton()">?</button>
         <button id = "Crypt-Button" onclick="handleCryptButton()">Encrypt!</button>
       </ul>
     </nav>
     <div id = "Pad-Between">.</div>
-    <div id="root"></div>
+    <div id = "flip-board"></div>
+    <button onclick = "setFlipBoardElementLocations()">Adjust Elements</button>
+    <button onclick = "setIndexZAfterFlip()">Simulate Flip</button>
     <div id="Key-Help-Pop-Up">No Algorithm Selected</div>
+    <!--
+    <div class="flip-board">
+        <img src="./character-images/[A]t.png" class = "flip-part flip-A-t">
+        <img src="./character-images/[A]b.png" class = "flip-part flip-A-b">
+    </div>
+    <div class="flip-board">
+      <img src="./character-images/[B]t.png" class = "flip-part flip-B-t">
+      <img src="./character-images/[B]b.png" class = "flip-part flip-B-b">
+    </div>
+    -->
   </body>
 </html>
