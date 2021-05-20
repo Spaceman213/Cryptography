@@ -1,5 +1,17 @@
 import React, { Fragment } from "react";
 
+function BoardRow(props) {
+  return (
+    <div id = {props.id} className = "board-row"></div>
+  );
+}
+function BoardColumn(props) {
+  return (
+    <div id = {props.id} className = "board-column"></div>
+  );
+}
+
+
 function FlipSquare(props) {
   return(
     <img src = {props.src} className = "flip-square" id = {props.id}></img>
@@ -119,11 +131,115 @@ class FlipBoard extends React.Component {
       />
     );
   }
+  renderBoardRow(num) {
+    var id = "row" + num;
+    return (
+      <BoardRow
+        id = {id}
+      />
+    )
+  }
+  renderBoardColumn(num) {
+    var id = "col" + num;
+    return (
+      <BoardColumn
+        id = {id}
+      />
+    )
+  }
   render() {
     return(
       <Fragment>
         {this.renderFlipComponent(0)}
         {this.renderFlipComponent(1)}
+        {this.renderFlipComponent(2)}
+        {this.renderFlipComponent(3)}
+        {this.renderFlipComponent(4)}
+        {this.renderFlipComponent(5)}
+        {this.renderFlipComponent(6)}
+        {this.renderFlipComponent(7)}
+        {this.renderFlipComponent(8)}
+        {this.renderFlipComponent(9)}
+        {this.renderFlipComponent(10)}
+        {this.renderFlipComponent(11)}
+        {this.renderFlipComponent(12)}
+        {this.renderFlipComponent(13)}
+        {this.renderFlipComponent(14)}
+        {this.renderFlipComponent(15)}
+
+        {this.renderFlipComponent(16)}
+        {this.renderFlipComponent(17)}
+        {this.renderFlipComponent(18)}
+        {this.renderFlipComponent(19)}
+        {this.renderFlipComponent(20)}
+        {this.renderFlipComponent(21)}
+        {this.renderFlipComponent(22)}
+        {this.renderFlipComponent(23)}
+        {this.renderFlipComponent(24)}
+        {this.renderFlipComponent(25)}
+        {this.renderFlipComponent(26)}
+        {this.renderFlipComponent(27)}
+        {this.renderFlipComponent(28)}
+        {this.renderFlipComponent(29)}
+        {this.renderFlipComponent(30)}
+        {this.renderFlipComponent(31)}
+
+        {this.renderFlipComponent(32)}
+        {this.renderFlipComponent(33)}
+        {this.renderFlipComponent(34)}
+        {this.renderFlipComponent(35)}
+        {this.renderFlipComponent(36)}
+        {this.renderFlipComponent(37)}
+        {this.renderFlipComponent(38)}
+        {this.renderFlipComponent(39)}
+        {this.renderFlipComponent(40)}
+        {this.renderFlipComponent(41)}
+        {this.renderFlipComponent(42)}
+        {this.renderFlipComponent(43)}
+        {this.renderFlipComponent(44)}
+        {this.renderFlipComponent(45)}
+        {this.renderFlipComponent(46)}
+        {this.renderFlipComponent(47)}
+
+        {this.renderFlipComponent(48)}
+        {this.renderFlipComponent(49)}
+        {this.renderFlipComponent(50)}
+        {this.renderFlipComponent(51)}
+        {this.renderFlipComponent(52)}
+        {this.renderFlipComponent(53)}
+        {this.renderFlipComponent(54)}
+        {this.renderFlipComponent(55)}
+        {this.renderFlipComponent(56)}
+        {this.renderFlipComponent(57)}
+        {this.renderFlipComponent(58)}
+        {this.renderFlipComponent(59)}
+        {this.renderFlipComponent(60)}
+        {this.renderFlipComponent(61)}
+        {this.renderFlipComponent(62)}
+        {this.renderFlipComponent(63)}
+
+        {this.renderBoardRow(0)}
+        {this.renderBoardRow(1)}
+        {this.renderBoardRow(2)}
+        {this.renderBoardRow(3)}
+
+        {this.renderBoardColumn(0)}
+        {this.renderBoardColumn(1)}
+        {this.renderBoardColumn(2)}
+        {this.renderBoardColumn(3)}
+        {this.renderBoardColumn(4)}
+        {this.renderBoardColumn(5)}
+        {this.renderBoardColumn(6)}
+        {this.renderBoardColumn(7)}
+        {this.renderBoardColumn(8)}
+        {this.renderBoardColumn(9)}
+        {this.renderBoardColumn(10)}
+        {this.renderBoardColumn(11)}
+        {this.renderBoardColumn(12)}
+        {this.renderBoardColumn(13)}
+        {this.renderBoardColumn(14)}
+        {this.renderBoardColumn(15)}
+        {this.renderBoardColumn(16)}
       </Fragment>
     )
   }

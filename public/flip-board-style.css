@@ -8,56 +8,18 @@
     width: 60px;
     height: 40px;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-.flip-board {
-    width: 60px;
+.board-row {
+    width: 100%;
     height: 80px;
-    background-color: red;
-    
+    background-color: #222222;
     position: absolute;
-    left: 100px;
+    z-index: 500;
+}
+.board-column {
+    width: 30px;
+    height: 640px;
+    background-color: #222222;
+    position: absolute;
+    z-index: 500;
     top: 100px;
-}
-.flip-part {
-    position: relative;
-    float: left;
-    width: 60px;
-    height: 40px;
-    background-color: green;
-}
-.flip-A-t {
-    z-index: 3;
-}
-.flip-A-b {
-    z-index: 4;
-}
-.flip-B-t {
-    z-index: 1;
-}
-.flip-B-b {
-    z-index: 2;
 }

@@ -1,6 +1,6 @@
 // Variables
 var algorithmType = 1;
-
+var speed = 1000;
 /*
  * Algorithm Drop Down Menu
  */
@@ -38,14 +38,17 @@ function handleSpeedDropdown() {
 function handleSFclick() {
     var element = document.getElementById("Speed-Button");
     element.innerHTML = "Speed: Fast  ";
+    speed = 1;
 }
 function handleSMclick() {
     var element = document.getElementById("Speed-Button");
     element.innerHTML = "Speed: Medium";
+    speed = 200;
 }
 function handleSSclick() {
     var element = document.getElementById("Speed-Button");
     element.innerHTML = "Speed: Slow  ";
+    speed = 1000;
 }
 
 /*
@@ -105,6 +108,8 @@ function handleCryptButton() {
     //$("#Title-Button").html("Test!");
     var textInput = document.getElementById("Message-Text-Box").value;
     var newText = "";
+    displayWord(textInput);
+    /*
     switch(algorithmType) {
         case 1:
             newText = caesarCipher(textInput, 3);
@@ -116,7 +121,7 @@ function handleCryptButton() {
         default:
             alert("Error in switch case");
             break;
-    }
+    }*/
     // Update new Text
     //document.getElementById("hello").innerHTML = newText;
 }
@@ -128,6 +133,10 @@ var flipElementsState = [];
 var characterList = ["purple", "blue", "green", "yellow", "orange", "red", "white", "percent", "degree",
 "qm", "bslash", "fslash", "rbr", "lbr", "per", "com", "dquote", "squote", "mul", "colon", "sc", "eq", "and", "add", "us", "min",
 "car", "rpar", "lpar", "cash", "hash", "as", "ex", "0", "9", "8", "7", "6", "5", "4", "3", "2", "1", "Z", "Y", "X", "W", "V",
+"U", "T", "S", "R", "Q", "P", "O", "N", "M", "L", "K", "J", "I", "H", "G", "F", "E", "D", "C", "B", "A"];
+// Note: ~ is equal to the degree sign
+var rawInputCharacterList = ["%", "~", "?", ">", "<", ".", ",", "*", ":", ";", "=", "&", "_", "-",
+"^", ")", "(", "$", "#", "@", "!", "0", "9", "8", "7", "6", "5", "4", "3", "2", "1", "Z", "Y", "X", "W", "V",
 "U", "T", "S", "R", "Q", "P", "O", "N", "M", "L", "K", "J", "I", "H", "G", "F", "E", "D", "C", "B", "A"];
 
 function populateStateIDs(num) {
@@ -144,19 +153,46 @@ function populateStateIDs(num) {
 /*
  * Function for initializing the React Flip Board
  */
+function initializeBoard() {
+    var topX = 180;
+    for (var i = 0; i < 4; i++) {
+        var id = "#row" + i;
+        var top = (topX + i * 160) + "px";
+        $(id).css("top", top);
+    }
+    $("#col0").css({"left":"0px","width":"15px"});
+    for (var i = 1; i < 16; i++) {
+        var id = "#col" + i;
+        var left = (75 + 90 * (i-1)) + "px";
+        $(id).css("left", left);
+    }
+    $("#col16").css({"right":"0px", "width":"15px"});
+    setFlipBoardElementLocations();
+}
+
+
 function setFlipBoardElementLocations() {
-    populateStateIDs(0);
-    populateStateIDs(1);
-    console.log("Array: " + flipElementsState.toString());
-    var left = 10;
+    for (var i = 0; i < 64; i++) {
+        populateStateIDs(i);
+    }
+    //console.log("Array: " + flipElementsState.toString());
+    var left = 0;
+    var top = 100;
     for (var i = 0; i < flipElementsState.length; i++) {
-        for (var j = 0; j < flipElementsState[i].length-1; j+=2) {
-            document.getElementById(flipElementsState[i][flipElementsState[i].length-2-j]).style.left = (left + 80*i) + "px";
-            document.getElementById(flipElementsState[i][flipElementsState[i].length-2-j]).style.top = "100px";
-    
-            document.getElementById(flipElementsState[i][flipElementsState[i].length-1-j]).style.left = (left + 80*i) + "px";
-            document.getElementById(flipElementsState[i][flipElementsState[i].length-1-j]).style.top = "140px";
+        if (i != 0 && i % 16 == 0) {
+            top += 160;
+            left = 0;
         }
+        for (var j = 0; j < flipElementsState[i].length-1; j+=2) {
+            var topID = flipElementsState[i][flipElementsState[i].length-2-j];
+            document.getElementById(topID).style.left = (left + 15) + "px";
+            document.getElementById(topID).style.top = top + "px";
+            var bottomID = flipElementsState[i][flipElementsState[i].length-1-j];
+            document.getElementById(bottomID).style.left = (left + 15) + "px";
+            document.getElementById(bottomID).style.top = (top + 40) + "px";
+        }
+        left += 90;
+        console.log("Styled component " + i + " at " + (left + 90*i) + " " + top);
         setFlipBoardElementsIndexZ(i);
     }
 }
@@ -168,7 +204,7 @@ function setFlipBoardElementsIndexZ(num) {
         document.getElementById(flipElementsState[num][i-1]).style.zIndex = i;
     }
 }
-function shiftZState(num) {
+function shiftStack(num) {
     var temp1 = flipElementsState[num][flipElementsState[num].length-2];
     var temp2 = flipElementsState[num][flipElementsState[num].length-1];
     for (var i = flipElementsState[num].length-1; i > 1; i--) {
@@ -177,38 +213,154 @@ function shiftZState(num) {
     flipElementsState[num][0] = temp1;
     flipElementsState[num][1] = temp2;
 }
+function flipAllCon(num) {
+    if (num <= 0) {
+        return;
+    }
+    flipAll(0, 64);
+    setTimeout(function() {
+        flipAllCon(num-1);
+    }, speed*3);
+}
+
+function flipAll(i, num) {
+    if (i >= num) {
+        //console.log("Stopped");
+        return;
+    }
+    simulateFlip(i);
+    flipAll(i+1, num);
+}
+
+function flipTimeControl(i, wait) {
+    if (i >= 64) {
+        return;
+    }
+    if (wait) {
+        setTimeout(function(){
+            simulateFlip(i);
+            flipControl(i+1, wait);
+        }, 500);
+    }
+    else {
+        simulateFlip(i);
+        flipTimeControl(i+1, wait);
+    }
+}
 
 /*Simulate Flip Button*/
-function setIndexZAfterFlip() {
-    var topID1 = "#" + flipElementsState[0][flipElementsState[0].length-2];
-    var bottomID1 = "#" + flipElementsState[0][flipElementsState[0].length-1];
-
-    var topID2 = "#" + flipElementsState[1][flipElementsState[1].length-2];
-    var bottomID2 = "#" + flipElementsState[1][flipElementsState[1].length-1];
-
-    var speed = 1000; // make divisible by 4
-    $(topID1).animate({'top':'140px'}, speed, function() {
-        $(topID1).animate({'top':'180px'}, speed);
-        $(bottomID1).animate({'top':'180px'}, speed, function() {
-            shiftZState(0);
-            setFlipBoardElementsIndexZ(0);
-            $(topID1).animate({'top':'100px'}, (speed));
-            $(bottomID1).animate({'top':'140px'}, (speed));
-        });
-    });
-    $(topID2).animate({'top':'140px'}, speed, function() {
-        $(topID2).animate({'top':'180px'}, speed);
-        $(bottomID2).animate({'top':'180px'}, speed, function() {
-            shiftZState(1);
-            setFlipBoardElementsIndexZ(1);
-            $(topID2).animate({'top':'100px'}, (speed));
-            $(bottomID2).animate({'top':'140px'}, (speed));
-            setTimeout(function(){
-                setIndexZAfterFlip();
-            }, 200);
+function simulateFlip(componentNum) {
+    var i = componentNum;
+    var top = 100;
+    var j = componentNum;
+    while(j >= 16) {
+        j -= 16;
+        top += 160;
+    }
+    var bottom = top + 40;
+    var topID = "#" + flipElementsState[i][flipElementsState[i].length-2];
+    var bottomID = "#" + flipElementsState[i][flipElementsState[i].length-1];
+    $(topID).animate({'top':bottom+"px"}, speed, function() {
+        $(topID).animate({'top':(bottom+40)+"px"}, speed);
+        $(bottomID).animate({'top':(bottom+40)+"px"}, speed, function() {
+            shiftStack(i);
+            setFlipBoardElementsIndexZ(i);
+            $(topID).animate({'top':top+"px"}, (speed));
+            $(bottomID).animate({'top':bottom+"px"}, (speed));
         });
     });
 }
+
+function displayWord(word) {
+    if (word.length > 30) {
+        alert("Word is too long");
+        return;
+    }
+    var wordLetters = word.split("");
+    for (var i = 0; i < wordLetters.length; i++) {
+        var letter = wordLetters[i];
+        var fakeID;
+        if (rawInputCharacterList.indexOf(letter) < 0) {
+            alert("Not valid character");
+        } else{
+            switch(letter) {
+                case "%":
+                    fakeID = "b_percent_"+i;
+                    break;
+                case "~":   //Degree
+                    fakeID = "b_deg_"+i;
+                    break;
+                case "?":
+                    fakeID = "b_qm_"+i;
+                    break;
+                case ">":
+                    fakeID = "b_rbr_"+i;
+                    break;
+                case "<":
+                    fakeID = "b_lbr_"+i;
+                    break;
+                case ".":
+                    fakeID = "b_per_"+i;
+                    break;
+                case ",":
+                    fakeID = "b_com_"+i;
+                    break;
+                case "*":
+                    fakeID = "b_mul_"+i;
+                    break;
+                case ":":
+                    fakeID = "b_col_"+i;
+                    break;
+                case ";":
+                    fakeID = "b_sc_"+i;
+                    break;
+                case "=":
+                    fakeID = "b_eq_"+i;
+                    break;
+                case "&":
+                    fakeID = "b_and_"+i;
+                    break;
+                case "+":
+                    fakeID = "b_add_"+i;
+                    break;
+                case "_":
+                    fakeID = "b_us_"+i;
+                    break;
+                case "-":
+                    fakeID = "b_min_"+i;
+                    break;
+                case "^":
+                    fakeID = "b_car_"+i;
+                    break;
+                case ")":
+                    fakeID = "b_rpar_"+i;
+                    break;
+                case "(":
+                    fakeID = "b_lpar_"+i;
+                    break;
+                case "$":
+                    fakeID = "b_cash_"+i;
+                    break;
+                case "#":
+                    fakeID = "b_hash_"+i;
+                    break;
+                case "@":
+                    fakeID = "b_as_"+i;
+                    break;
+                case "!":
+                    fakeID = "b_ex_"+i;
+                    break;
+                default:
+                    fakeID = "b_"+letter+"_"+i;
+                    break;
+            }
+        }
+        var flipsNeeded = ((flipElementsState[i].length-1) - flipElementsState[i].indexOf(fakeID))/2;
+        alert("Need " + flipsNeeded + " flips for character " + letter);
+    }
+}
+
+
 
 /*
  * Event Listener for the entire website
@@ -234,5 +386,5 @@ document.addEventListener("click", function(event){
     }
 });
 document.addEventListener("DOMContentLoaded", function() {
-    setFlipBoardElementLocations();
+    initializeBoard();
 });
