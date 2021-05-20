@@ -9,8 +9,8 @@ function FlipSquare(props) {
 function FlipLayer(props) {
   var src1 = "./character-images/[" + props.symbol + "]t.png";
   var src2 = "./character-images/[" + props.symbol + "]b.png";
-  var id1 = "t_" + props.symbol + "_" + props.row + "_" + props.column;
-  var id2 = "b_" + props.symbol + "_" + props.row + "_" + props.column;
+  var id1 = "t_" + props.symbol + "_" + props.num;
+  var id2 = "b_" + props.symbol + "_" + props.num;
   return(
     <Fragment>
       <FlipSquare
@@ -30,8 +30,7 @@ class FlipComponent extends React.Component {
     return(
       <FlipLayer
         symbol = {symbol}
-        row = {this.props.row}
-        column = {this.props.column}
+        num = {this.props.num}
       />
     );
   }
@@ -113,18 +112,18 @@ class FlipComponent extends React.Component {
 }
 
 class FlipBoard extends React.Component {
-  renderFlipComponent(row, column) {
+  renderFlipComponent(num) {
     return (
       <FlipComponent 
-        row = {row}
-        column = {column}
+        num = {num}
       />
     );
   }
   render() {
     return(
       <Fragment>
-        {this.renderFlipComponent(0,0)}
+        {this.renderFlipComponent(0)}
+        {this.renderFlipComponent(1)}
       </Fragment>
     )
   }

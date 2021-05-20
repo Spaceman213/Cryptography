@@ -130,59 +130,79 @@ var characterList = ["purple", "blue", "green", "yellow", "orange", "red", "whit
 "car", "rpar", "lpar", "cash", "hash", "as", "ex", "0", "9", "8", "7", "6", "5", "4", "3", "2", "1", "Z", "Y", "X", "W", "V",
 "U", "T", "S", "R", "Q", "P", "O", "N", "M", "L", "K", "J", "I", "H", "G", "F", "E", "D", "C", "B", "A"];
 
-function createElementIdAndPopulateState() {
+function populateStateIDs(num) {
+    var componentState = [];
     for (var i = 0; i < characterList.length; i++) {
-        var id1 = "t_" + characterList[i] + "_0_0";
-        var id2 = "b_" + characterList[i] + "_0_0";
-        flipElementsState.push(id1);
-        flipElementsState.push(id2);
+        var id1 = "t_" + characterList[i] + "_" + num;
+        var id2 = "b_" + characterList[i] + "_" + num;
+        componentState.push(id1);
+        componentState.push(id2);
     }
+    flipElementsState.push(componentState);
 }
 
 /*
  * Function for initializing the React Flip Board
  */
 function setFlipBoardElementLocations() {
-    createElementIdAndPopulateState();
+    populateStateIDs(0);
+    populateStateIDs(1);
     console.log("Array: " + flipElementsState.toString());
-    for (var i = 0; i < flipElementsState.length-1; i+=2) {
-        document.getElementById(flipElementsState[flipElementsState.length-2-i]).style.left = "10px";
-        document.getElementById(flipElementsState[flipElementsState.length-2-i]).style.top = "100px";
-
-        document.getElementById(flipElementsState[flipElementsState.length-1-i]).style.left = "10px";
-        document.getElementById(flipElementsState[flipElementsState.length-1-i]).style.top = "140px";
+    var left = 10;
+    for (var i = 0; i < flipElementsState.length; i++) {
+        for (var j = 0; j < flipElementsState[i].length-1; j+=2) {
+            document.getElementById(flipElementsState[i][flipElementsState[i].length-2-j]).style.left = (left + 80*i) + "px";
+            document.getElementById(flipElementsState[i][flipElementsState[i].length-2-j]).style.top = "100px";
+    
+            document.getElementById(flipElementsState[i][flipElementsState[i].length-1-j]).style.left = (left + 80*i) + "px";
+            document.getElementById(flipElementsState[i][flipElementsState[i].length-1-j]).style.top = "140px";
+        }
+        setFlipBoardElementsIndexZ(i);
     }
-    setFlipBoardElementsIndexZ();
 }
 /*
  * Function that will layer the React Elements based on the current positioning in the state array
  */
-function setFlipBoardElementsIndexZ() {
-    for (var i = 1; i <= flipElementsState.length; i++) {
-        document.getElementById(flipElementsState[i-1]).style.zIndex = i;
+function setFlipBoardElementsIndexZ(num) {
+    for (var i = 1; i <= flipElementsState[num].length; i++) {
+        document.getElementById(flipElementsState[num][i-1]).style.zIndex = i;
     }
 }
-function shiftZState() {
-    var temp1 = flipElementsState[flipElementsState.length-2];
-    var temp2 = flipElementsState[flipElementsState.length-1];
-    for (var i = flipElementsState.length-1; i > 1; i--) {
-        flipElementsState[i] = flipElementsState[i-2];
+function shiftZState(num) {
+    var temp1 = flipElementsState[num][flipElementsState[num].length-2];
+    var temp2 = flipElementsState[num][flipElementsState[num].length-1];
+    for (var i = flipElementsState[num].length-1; i > 1; i--) {
+        flipElementsState[num][i] = flipElementsState[num][i-2];
     }
-    flipElementsState[0] = temp1;
-    flipElementsState[1] = temp2;
+    flipElementsState[num][0] = temp1;
+    flipElementsState[num][1] = temp2;
 }
 
+/*Simulate Flip Button*/
 function setIndexZAfterFlip() {
-    var topID = "#" + flipElementsState[flipElementsState.length-2];
-    var bottomID = "#" + flipElementsState[flipElementsState.length-1];
-    var speed = 1; // make divisible by 4
-    $(topID).animate({'top':'140px'}, speed, function() {
-        $(topID).animate({'top':'180px'}, speed);
-        $(bottomID).animate({'top':'180px'}, speed, function() {
-            shiftZState();
-            setFlipBoardElementsIndexZ();
-            $(topID).animate({'top':'100px'}, (speed));
-            $(bottomID).animate({'top':'140px'}, (speed));
+    var topID1 = "#" + flipElementsState[0][flipElementsState[0].length-2];
+    var bottomID1 = "#" + flipElementsState[0][flipElementsState[0].length-1];
+
+    var topID2 = "#" + flipElementsState[1][flipElementsState[1].length-2];
+    var bottomID2 = "#" + flipElementsState[1][flipElementsState[1].length-1];
+
+    var speed = 1000; // make divisible by 4
+    $(topID1).animate({'top':'140px'}, speed, function() {
+        $(topID1).animate({'top':'180px'}, speed);
+        $(bottomID1).animate({'top':'180px'}, speed, function() {
+            shiftZState(0);
+            setFlipBoardElementsIndexZ(0);
+            $(topID1).animate({'top':'100px'}, (speed));
+            $(bottomID1).animate({'top':'140px'}, (speed));
+        });
+    });
+    $(topID2).animate({'top':'140px'}, speed, function() {
+        $(topID2).animate({'top':'180px'}, speed);
+        $(bottomID2).animate({'top':'180px'}, speed, function() {
+            shiftZState(1);
+            setFlipBoardElementsIndexZ(1);
+            $(topID2).animate({'top':'100px'}, (speed));
+            $(bottomID2).animate({'top':'140px'}, (speed));
             setTimeout(function(){
                 setIndexZAfterFlip();
             }, 200);
