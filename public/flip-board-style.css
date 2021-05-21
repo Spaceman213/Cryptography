@@ -1,0 +1,13 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.flip-square {
+    position: absolute;
+    width: 60px;
+    height: 40px;
+    background-image: url("./character-images/symbolSpriteSheet.png");
+    /*background-position: 0px;*/
+    background-size: cover;
+}
