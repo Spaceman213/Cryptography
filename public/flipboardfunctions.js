@@ -3,30 +3,56 @@ var globalFlipBoardState = [];
 var SLMap = new Map();
 
 // Order is alphaSheet2, alphaSheet1, numberSheet
-var globalBoolState = [true];
+var globalBoolState = [];
 var componentLocations = [];
-var characterList = ["p","b","g","y","o","r","w","%", "~", "?", ">", "<", ".", ",", "*", ":", ";", "=", "&", "_", "-",
+var characterList = ["p","b","g","y","o","r","w","%", "?", ">", "<", ".", ",", "*", ":", ";", "=", "&", "+", "_", "-",
 "^", ")", "(", "$", "#", "@", "!", "0", "9", "8", "7", "6", "5", "4", "3", "2", "1", "Z", "Y", "X", "W", "V",
 "U", "T", "S", "R", "Q", "P", "O", "N", "M", "L", "K", "J", "I", "H", "G", "F", "E", "D", "C", "B", "A", " "];
-var totalComponents = 1;
+var totalComponents = 64;
 //var opposite = false;
-var speed = 100;
+var speed = 10;
 function initializeBoard() {
+    initializeBoolState();
     populateSLMap();
     populateState();
     initializeLocations();
     setLocations();
-    setIndexZ();
+    setAllZ();
+}
+function setAllZ() {
+    for (var i = 0; i < totalComponents; i++) {
+        setIndexZ(i);
+    }
+}
+
+function printState() {
+    for (var i = 0; i < globalFlipBoardState.length; i++) {
+        var s = "";
+        for (var j = 0; j < globalFlipBoardState[i].length; j++) {
+            s += globalFlipBoardState[i][j] + " ";
+        }
+        console.log(s);
+    }
+}
+
+function initializeBoolState() {
+    for (var i = 0; i < totalComponents; i++) {
+        globalBoolState.push(true);
+    }
+    //console.log("GBS:" + globalBoolState.toString());
 }
 
 function initializeLocations() {
     var LEFT = 10;
     var TOP = 100;
-    for (var i = 0; i < totalComponents; i++) {
-        var coords = [];
-        coords.push(LEFT);
-        coords.push(TOP);
-        componentLocations.push(coords);
+
+    for (var r = 0; r < 4; r++) {
+        for (var c = 0; c < 16; c++) {
+            var coords = [];
+            coords.push(LEFT + (c * 90));
+            coords.push(TOP + (r * 160));
+            componentLocations.push(coords);
+        }
     }
 }
 function populateSLMap() {
@@ -41,8 +67,8 @@ function populateSLMap() {
     }
 }
 function populateState() {
-    var spriteLength = 7740;
     for (var i = 0; i < totalComponents; i++) {
+        var spriteLength = 7740;
         var componentState = []
         for (var j = spriteLength; j >= 0; j -= 60) {
             var location = "-" + j + "px";
@@ -57,8 +83,6 @@ function populateState() {
  */
 function setLocations() {
     for (var i = 0; i < totalComponents; i++) {
-        console.log(componentLocations[i][0] + ", " + componentLocations[i][1]);
-        console.log(componentLocations[i][0] + ", " + componentLocations[i][1] + 40);
         $("#FS_0_0_" + i).css({"left": componentLocations[i][0] + "px", "top": componentLocations[i][1] + "px", "background-position": globalFlipBoardState[i][globalFlipBoardState[i].length - 1]});
         $("#FS_1_0_" + i).css({"left": componentLocations[i][0] + "px", "top": componentLocations[i][1] + 40 + "px", "background-position": globalFlipBoardState[i][globalFlipBoardState[i].length - 2]});
         $("#FS_0_1_" + i).css({"left": componentLocations[i][0] + "px", "top": componentLocations[i][1] + "px", "background-position": globalFlipBoardState[i][globalFlipBoardState[i].length - 3]});
@@ -68,21 +92,21 @@ function setLocations() {
 /*
  * Function that will layer the React Elements based on the current positioning in the state array
  */
-function setIndexZ() {
-    for (var i = 0; i < totalComponents; i++) {
-        if (globalBoolState[i]) {
-            $("#FS_0_0_" + i).css({"z-index":"3"});
-            $("#FS_1_0_" + i).css({"z-index":"4"});
-            $("#FS_0_1_" + i).css({"z-index":"1"});
-            $("#FS_1_1_" + i).css({"z-index":"2"});
-        } else {
-            $("#FS_0_0_" + i).css({"z-index":"1"});
-            $("#FS_1_0_" + i).css({"z-index":"2"});
-            $("#FS_0_1_" + i).css({"z-index":"3"});
-            $("#FS_1_1_" + i).css({"z-index":"4"});
-        }
-        globalBoolState[i] = !globalBoolState[i];
+function setIndexZ(component) {
+    var i = component;
+    if (globalBoolState[i]) {
+        //alert("here");
+        $("#FS_0_0_" + i).css({"z-index":"3"});
+        $("#FS_1_0_" + i).css({"z-index":"4"});
+        $("#FS_0_1_" + i).css({"z-index":"1"});
+        $("#FS_1_1_" + i).css({"z-index":"2"});
+    } else {
+        $("#FS_0_0_" + i).css({"z-index":"1"});
+        $("#FS_1_0_" + i).css({"z-index":"2"});
+        $("#FS_0_1_" + i).css({"z-index":"3"});
+        $("#FS_1_1_" + i).css({"z-index":"4"});
     }
+    globalBoolState[i] = !globalBoolState[i];
 }
 function flipRepeat(x, component) {
     if (x <= 0) {
@@ -108,12 +132,9 @@ function flip(component) {
         $(TID).animate({'top': componentLocations[i][1] + 80 + "px"}, speed);
         $(BID).animate({'top': componentLocations[i][1] + 80 + "px"}, speed, function() {
             shiftSpritePosition(component);
-            setIndexZ();
+            setIndexZ(component);
             $(TID).animate({'top': componentLocations[i][1] + "px"}, 1); // Might not need to animate
             $(BID).animate({'top': componentLocations[i][1] + 40 + "px"}, 1);
-            /*setTimeout(function(){
-                flip(component);
-            }, speed*2);*/
         });
     });
 
@@ -142,23 +163,22 @@ function shiftSpritePosition(component) {
 function displayWord(word) {
     if (word.length > totalComponents) {
         alert("Word is too long");
-        //flip(0);
     }
-    //for (var i = 0; i < characterList.length; i++) {
-    //    console.log(characterList[i] + ": " + SLMap.get(characterList[i])[0] + " " + SLMap.get(characterList[i])[1]);
-    //}
+    for (var i = word.length; i < totalComponents; i++) {
+        word += " ";
+    }
     var letters = word.split("");
-    var locations = SLMap.get(letters[0]);
-    //console.log("Locations: " + locations[0] + " " + locations[1]);
-    //$("#FS_0_0_0").css({"background-position": SLMap.get(letters[0])[1]});
-    //$("#FS_1_0_0").css({"background-position": SLMap.get(letters[0])[0]});
-    
-    var r = (globalFlipBoardState[0].length / 2) - (globalFlipBoardState[0].indexOf(locations[0]) / 2) - 1;
-
-    flipRepeat(r, 0);
-
-    //console.log(locations.toString());
-    //console.log("R: " + r);
+    for (var i = 0; i < letters.length; i++) {
+        console.log("Letter: " + letters[i]);
+        var locations = SLMap.get(letters[i]);
+        console.log("Location: " + locations[0] + " " + locations[1]);
+        var r = (globalFlipBoardState[i].length / 2) - (globalFlipBoardState[i].indexOf(locations[0]) / 2) - 1;
+        flipRepeat(r, i);
+    }
+}
+function displayFromTextBox() {
+    //console.log(document.getElementById("Message-Text-Box").value);
+    displayWord(document.getElementById("Message-Text-Box").value);
 }
 
 
