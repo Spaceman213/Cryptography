@@ -5,12 +5,26 @@ var SLMap = new Map();
 // Order is alphaSheet2, alphaSheet1, numberSheet
 var globalBoolState = [];
 var componentLocations = [];
-var characterList = ["p","b","g","y","o","r","w","%", "?", ">", "<", ".", ",", "*", ":", ";", "=", "&", "+", "_", "-",
-"^", ")", "(", "$", "#", "@", "!", "0", "9", "8", "7", "6", "5", "4", "3", "2", "1", "Z", "Y", "X", "W", "V",
-"U", "T", "S", "R", "Q", "P", "O", "N", "M", "L", "K", "J", "I", "H", "G", "F", "E", "D", "C", "B", "A", " "];
+var characterList = [
+    "p", "b", "g", "y", "o", "r", "w", "%", "?", ">", "<", ".", ",",
+    "*", ":", ";", "=", "&", "+", "_", "-", "^", ")", "(", "$", "#",
+    "@", "!", "0", "9", "8", "7", "6", "5", "4", "3", "2", "1", "Z",
+    "Y", "X", "W", "V", "U", "T", "S", "R", "Q", "P", "O", "N", "M",
+    "L", "K", "J", "I", "H", "G", "F", "E", "D", "C", "B", "A", " "
+];
+// Timing data will be length of the MAX amount of flips, in our case: 65 - 1 = 64
+var timingDataMedium = [
+    1000, 300, 100, 50,
+    50, 50, 50, 50, 50, 50, 50, 50, 50, 50,
+    50, 50, 50, 50, 50, 50, 50, 50, 50, 50,
+    50, 50, 50, 50, 50, 50, 50, 50, 50, 50,
+    50, 50, 50, 50, 50, 50, 50, 50, 50, 50,
+    50, 50, 50, 50, 50, 50, 50, 50, 50, 50,
+    50, 50, 50, 50, 50, 50, 50, 50, 50, 50,
+];
 var totalComponents = 64;
 //var opposite = false;
-var speed = 10;
+var speed = 1000;
 function initializeBoard() {
     initializeBoolState();
     populateSLMap();
@@ -43,9 +57,16 @@ function initializeBoolState() {
 }
 
 function initializeLocations() {
-    var LEFT = 10;
-    var TOP = 100;
-
+    var LEFT = 15;
+    var TOP = 150;
+    for (var i = 0; i < 5; i++) {
+        $("#row" + i).css({"top":((TOP-80) + i * 160)+"px"});
+    }
+    $("#col0").css({"top":(TOP-80)+"px", "left":"0px", "width": LEFT + "px"});
+    for (var i = 1; i < 16; i++) {
+        $("#col" + i).css({"top":(TOP-80)+"px", "left":((LEFT + 60) + 90 * (i - 1))+"px"});
+    }
+    $("#col16").css({"top":(TOP-80)+"px", "right":"0px", "width": LEFT + "px"});
     for (var r = 0; r < 4; r++) {
         for (var c = 0; c < 16; c++) {
             var coords = [];
@@ -112,13 +133,13 @@ function flipRepeat(x, component) {
     if (x <= 0) {
         return;
     }
-    flip(component);
+    flip(component, timingDataMedium[x - 1]);
     setTimeout(function() {
         flipRepeat(x-1, component);
-    }, speed*3);
+    }, timingDataMedium[x - 1] + 20);
 }
 
-function flip(component) {
+function flip(component, s) {
     var i = component;
     var TID; var BID;
     if (!globalBoolState[i]) {
@@ -128,9 +149,10 @@ function flip(component) {
         TID = "#FS_0_1_" + i;
         BID = "#FS_1_1_" + i;
     }
-    $(TID).animate({'top': componentLocations[i][1] + 40 + "px"}, speed, function() {
-        $(TID).animate({'top': componentLocations[i][1] + 80 + "px"}, speed);
-        $(BID).animate({'top': componentLocations[i][1] + 80 + "px"}, speed, function() {
+    var animateSpeed = s / 2;
+    $(TID).animate({'top': componentLocations[i][1] + 40 + "px"}, animateSpeed, function() {
+        $(TID).animate({'top': componentLocations[i][1] + 80 + "px"}, animateSpeed);
+        $(BID).animate({'top': componentLocations[i][1] + 80 + "px"}, animateSpeed, function() {
             shiftSpritePosition(component);
             setIndexZ(component);
             $(TID).animate({'top': componentLocations[i][1] + "px"}, 1); // Might not need to animate
@@ -160,14 +182,80 @@ function shiftSpritePosition(component) {
     }
 }
 
+
+function refactorWord(word) {
+    var inputChars = word.split("");
+    var newChars = [];
+    var color = false;
+    for (var i = 0; i < inputChars.length; i++) {
+        if (color) {
+            switch (inputChars[i]) {
+                case "r":
+                case "o":
+                case "y":
+                case "g":
+                case "b":
+                case "p":
+                    newChars.push(inputChars[i]);
+                    color = false;
+                    break;
+                default:
+                    alert("Not valid char after ~")
+            }
+        }
+        else if (inputChars[i] == inputChars[i].toUpperCase()) {
+            if (inputChars[i] == "~") {
+                color = true;
+                if (i == (inputChars.length - 1)) {
+                    alert("Cannot end with ~");
+                }
+            }
+            else {
+                newChars.push(inputChars[i]);
+            }
+        } else {
+            newChars.push(inputChars[i].toUpperCase());
+        }
+    }
+    return newChars;
+}
+function refactorNL(charArray) {
+    var newChars = [];
+    var newLinesBefore = 1;
+    var i = 0;
+    for (var l = 0; l < charArray.length; l++) {
+        if (charArray[l] == "|") {
+            var j = i;
+            while ((j + 1) % 16 != 0) {
+                j++;
+            }
+            console.log("Nearest End: " + j);
+            console.log("Spaces NLB: " + newLinesBefore);
+            var spaces = j - i + newLinesBefore;
+            console.log("Spaces between: " + spaces);
+            for (var k = 0; k < spaces; k++) {
+                newChars.push(" ");
+                i++;
+            }
+            newLinesBefore++;
+        } else {
+            newChars.push(charArray[l]);
+        }
+        i++;
+    }
+    return newChars;
+}
+
 function displayWord(word) {
-    if (word.length > totalComponents) {
+    var letters;
+    letters = refactorWord(word);
+    letters = refactorNL(letters);
+    if (letters.length > totalComponents) {
         alert("Word is too long");
     }
-    for (var i = word.length; i < totalComponents; i++) {
-        word += " ";
+    for (var i = letters.length; i < totalComponents; i++) {
+        letters.push(" ");
     }
-    var letters = word.split("");
     for (var i = 0; i < letters.length; i++) {
         console.log("Letter: " + letters[i]);
         var locations = SLMap.get(letters[i]);

@@ -11,3 +11,18 @@
     /*background-position: 0px;*/
     background-size: cover;
 }
+
+.board-row {
+    width: 100%;
+    height: 80px;
+    background-color: #222222;
+    position: absolute;
+    z-index: 5;
+}
+.board-column {
+    width: 30px;
+    height: 640px;
+    background-color: #222222;
+    position: absolute;
+    z-index: 5;
+}
