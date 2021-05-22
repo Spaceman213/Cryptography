@@ -13,7 +13,7 @@
       <p id = "Title-Button" onclick = "location.reload()">Cryptography Visualizer</p>
       <ul>
         <p id = "Enter-Text">Enter Text:</p>
-        <input type="text" name="name" id="Message-Text-Box" value=""></input>
+        <input type="text" name="name" id="Message-Text-Box" value="" onclick = "handleEnterTestClick();"></input>
         <li><a href = "#" id = "Algorithm-Button" onclick="handleAlgorithmDropdown()">Algorithm</a>
           <ul id = "Algorithm-Dropdown-Container">
             <li><a href = "#" class = "Algorithm-Dropdown" onclick="handleCCclick()">Caesar Cipher</a></li>
@@ -40,20 +40,13 @@
         <button id = "Crypt-Button" onclick="handleCryptButton()">Encrypt!</button>
       </ul>
     </nav>
-    <div id = "Pad-Between">.</div>
     <div id = "flip-board"></div>
-    <button onclick = "flip(0)">Simulate Flip</button>
-    <button onclick = "displayFromTextBox()">Display Word</button>
     <div id="Key-Help-Pop-Up">No Algorithm Selected</div>
-    <!--
-    <div class="flip-board">
-        <img src="./character-images/[A]t.png" class = "flip-part flip-A-t">
-        <img src="./character-images/[A]b.png" class = "flip-part flip-A-b">
-    </div>
-    <div class="flip-board">
-      <img src="./character-images/[B]t.png" class = "flip-part flip-B-t">
-      <img src="./character-images/[B]b.png" class = "flip-part flip-B-b">
-    </div>
-    -->
+    <div id = "Bottom-Ribbon"></div>
+    <button id = "Wave-Button" onclick = "handleWaveButton()">Wave</button>
+    <button id = "Table-Button" onclick = "handleTableButton()">Table</button>
+    <button id = "Test-Button" onclick = "handleTestButton()">Test</button>
+    <button id = "Clear-Button" onclick = "handleClearButton()">Clear</button>
+    <button id = "Random-Button" onclick = "handleRandomButton()">Random</button>
   </body>
 </html>

@@ -8,7 +8,7 @@
     transition: 0.3s color;
 }
 #Title-Button:hover {
-    color: #0C3953;
+    color: #333333;
 }
 
 #Enter-Text {
@@ -48,7 +48,7 @@
     margin-top: 16px;
     margin-left: 10px;
     padding: 4px 8px;
-    background: #0C3953;
+    background: #333333;
 	color: #ffffff;
 	border: none;
 	font: Arial;
@@ -61,7 +61,7 @@
     transition: 0.3s background-color;
 }
 #Key-Help-Button:hover {
-    background: #24516B;
+    background: #444444;
 }
 #Key-Help-Pop-Up {
     visibility: hidden;
@@ -71,7 +71,7 @@
     font-size: 12px;
     padding: 6px;
     visibility: visible;
-    color: #0C3953;
+    color: #000000;
     background-color: #A9A9A9;
     width: 150px;
     position: absolute;
@@ -80,6 +80,7 @@
     opacity: 0.9;
     font-weight: 600;
     border-radius: 10px 10px 10px 10px;
+    z-index: 5;
 }
 
 #Crypt-Button {
@@ -87,7 +88,7 @@
     margin-top: 6px;
     margin-left: 32px;
     padding: 0px 12px;
-    background: #0C3953;
+    background: #333333;
 	color: #ffffff;
 	border: none;
 	font: Arial;
@@ -100,20 +101,22 @@
     transition: 0.3s background-color;
 }
 #Crypt-Button:hover {
-    background: #24516B;
+    background: #444444;
 }
-
-#Pad-Between {
-    font-size: 2px;
-    color: #FFFFFF;
-    background-color: #FFFFFF;
+#Bottom-Ribbon {
+    width: 100%;
+    height: 45px;
+    background-color: #555555;
+    z-index: 6;
+    position: absolute;
+    bottom: 0px;
 }
 
 p {
     font-family: Arial;
     color: #ffffff;
     font-weight: 900;
-    background-color: #5f9EA0;
+    background-color: #555555;
     float: left;
     padding: 0px 20px;
 }
@@ -121,7 +124,7 @@ p {
 nav {
     width: 100%;
     height: 60px;
-    background-color: #5f9EA0;
+    background-color: #555555;
 }
 
 nav ul {
@@ -145,15 +148,16 @@ nav ul li a {
     transition: 0.3s color;
 }
 nav ul li a:hover {
-    color: #0C3953;
+    color: #333333;
 }
 
 nav ul li ul {
     display: none;
     position: absolute;
-    background-color: #5f9EA0;
+    background-color: #555555;
     padding: 10px;
     border-radius: 0px 0px 10px 10px;
+    z-index: 6;
 }
 nav ul li ul.show-algo-dropdown {
     display: block;
@@ -177,11 +181,106 @@ nav ul li ul li a {
 }
 nav ul li ul li a:hover{
     color: #ffffff;
-    background-color: #0C3953;
+    background-color: #333333;
 }
 
-#test{
-    font-size: 100px;
-    color: red;
-    background-color: blue;
+#Wave-Button {
+    position: absolute;
+    z-index: 6;
+    bottom: 10px;
+    left: 80px;
+    padding: 4px 8px;
+    background: #333333;
+	color: #ffffff;
+	border: none;
+	font-family: Arial;
+    font-size: 16px;
+	cursor: pointer;
+	outline: inherit;
+    font-weight: 900;
+    border-radius: 10px 10px 10px 10px;
+    transition: 0.3s background-color;
+}
+#Wave-Button:hover {
+    background: #444444;
+}
+#Table-Button {
+    position: absolute;
+    z-index: 6;
+    bottom: 10px;
+    left: 152px;
+    padding: 4px 8px;
+    background: #333333;
+	color: #ffffff;
+	border: none;
+	font-family: Arial;
+    font-size: 16px;
+	cursor: pointer;
+	outline: inherit;
+    font-weight: 900;
+    border-radius: 10px 10px 10px 10px;
+    transition: 0.3s background-color;
+}
+#Table-Button:hover {
+    background: #444444;
+}
+#Test-Button {
+    position: absolute;
+    z-index: 6;
+    bottom: 10px;
+    left: 225px;
+    padding: 4px 8px;
+    background: #333333;
+	color: #ffffff;
+	border: none;
+	font-family: Arial;
+    font-size: 16px;
+	cursor: pointer;
+	outline: inherit;
+    font-weight: 900;
+    border-radius: 10px 10px 10px 10px;
+    transition: 0.3s background-color;
+}
+#Test-Button:hover {
+    background: #444444;
+}
+#Clear-Button {
+    position: absolute;
+    z-index: 6;
+    bottom: 10px;
+    left: 10px;
+    padding: 4px 8px;
+    background: #333333;
+	color: #ffffff;
+	border: none;
+	font-family: Arial;
+    font-size: 16px;
+	cursor: pointer;
+	outline: inherit;
+    font-weight: 900;
+    border-radius: 10px 10px 10px 10px;
+    transition: 0.3s background-color;
+}
+#Clear-Button:hover {
+    background: #444444;
+}
+#Random-Button {
+    position: absolute;
+    z-index: 6;
+    bottom: 10px;
+    left: 290px;
+    padding: 4px 8px;
+    background: #333333;
+	color: #ffffff;
+	border: none;
+	font-family: Arial;
+    font-size: 16px;
+	cursor: pointer;
+	outline: inherit;
+    font-weight: 900;
+    border-radius: 10px 10px 10px 10px;
+    transition: 0.3s background-color;
+}
+#Random-Button:hover {
+    background: #444444;
 }

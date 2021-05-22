@@ -95,28 +95,4 @@ function handleKeyHelpButton() {
     }
 }
 
-/*
- * Encrypt/Decrypt Button 
- *   Starts main program functionality
- */
-
-function handleCryptButton() {
-    //alert("Test");
-    //$("#Title-Button").html("Test!");
-    var textInput = document.getElementById("Message-Text-Box").value;
-    var newText = "";
-    switch(algorithmType) {
-        case 1:
-            newText = caesarCipher(textInput, 3);
-            break;
-        case 2:
-            break;
-        case 3:
-            break;  
-        default:
-            alert("Error in switch case");
-            break;
-    }
-    // Update new Text
-    //document.getElementById("hello").innerHTML = newText;
-}
+//================================================================================

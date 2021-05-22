@@ -1,6 +1,142 @@
+/*
+ * Encrypt/Decrypt Button 
+ *   Starts main program functionality
+ */
+function handleRandomButton() {
+    var word = "";
+    for (var i = 0; i < 64; i++) {
+        var r = Math.floor(Math.random() * 65);
+        var letter = characterList[r];
+        if (letter.toUpperCase() != letter) {
+            letter = "~" + letter;
+        }
+        word += letter;
+    }
+    console.log(word);
+    if (startUp) {
+        startUp = false;
+        stackAnimating = [];
+        setTimeout(function() {
+            displayWord(word);
+        }, 8000);
+    } else {
+        displayWord(word);
+    }
+}
+
+function handleClearButton() {
+    if (startUp) {
+        startUp = false;
+        stackAnimating = [];
+        setTimeout(function() {
+            displayWord(" ");
+        }, 8000);
+    } else {
+        displayWord(" ");
+    }
+}
+function handleTestButton() {
+    if (startUp) {
+        startUp = false;
+        stackAnimating = [];
+        setTimeout(function() {
+            displayWord("                     HELLO,      THIS IS A TEST");
+        }, 8000);
+    } else {
+        displayWord("                     HELLO,      THIS IS A TEST");
+    }
+}
+function handleTableButton() {
+    if (startUp) {
+        startUp = false;
+        stackAnimating = [];
+        setTimeout(function() {
+            displayWord("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$()^-_+=;:*,.<>?%~w~r~o~y~g~b~p");
+        }, 8000);
+    } else {
+        displayWord("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$()^-_+=;:*,.<>?%~w~r~o~y~g~b~p");
+    }
+}
+function handleWaveButton() {
+    if (startUp) {
+        startUp = false;
+        stackAnimating = [];
+        setTimeout(function() {
+            animateClearWave(0);
+        }, 8000);
+    } else {
+        animateClearWave(0);
+    }
+}
+
+function handleCryptButton() {
+    //$("#Title-Button").html("Test!");
+    var textInput = document.getElementById("Message-Text-Box").value;
+    var newText = "";
+    switch(algorithmType) {
+        case 1:
+            newText = caesarCipher(textInput, 3);
+            break;
+        case 2:
+            break;
+        case 3:
+            break;  
+        default:
+            alert("Error in switch case");
+            break;
+    }
+    displayWord(textInput);
+    // Update new Text
+    //document.getElementById("hello").innerHTML = newText;
+}
+function handleEnterTestClick() {
+    if (startUp) {
+        startUp = false;
+        stackAnimating = [];
+    }
+}
+function animateClearWave(component) {
+    if (component >= 64) {
+        return;
+    }
+    if (stackAnimating.indexOf(component) == -1) {
+        flipRepeat(65, component);
+    }
+    setTimeout(function() {
+        animateClearWave(component + 1);
+    }, 50);
+}
+
+var stackAnimating = [];
+function animateStartScreen() {
+    var randomComponent = Math.floor(Math.random() * 64);
+    while (stackAnimating.indexOf(randomComponent) != -1) {
+        randomComponent = Math.floor(Math.random() * 64);
+    }
+    stackAnimating.push(randomComponent);
+    flipRepeat(65, randomComponent);
+    setTimeout(function() {
+        /*console.log("Array: ")
+        for (var i = 0; i < stackAnimating.length; i++) {
+            console.log(stackAnimating[i]);
+        }*/
+        if (stackAnimating.length > 15) {
+            stackAnimating.splice(0, 1);
+        }
+        if (startUp) {
+            animateStartScreen();
+        }
+    }, 500);
+}
+
+
+
+//===============================================================================
+
 // Store based on index (stack), last element is the highest up on stack
 var globalFlipBoardState = [];
 var SLMap = new Map();
+var startUp = true;
 
 // Order is alphaSheet2, alphaSheet1, numberSheet
 var globalBoolState = [];
@@ -13,14 +149,43 @@ var characterList = [
     "L", "K", "J", "I", "H", "G", "F", "E", "D", "C", "B", "A", " "
 ];
 // Timing data will be length of the MAX amount of flips, in our case: 65 - 1 = 64
-var timingDataMedium = [
-    1000, 300, 100, 50,
-    50, 50, 50, 50, 50, 50, 50, 50, 50, 50,
-    50, 50, 50, 50, 50, 50, 50, 50, 50, 50,
-    50, 50, 50, 50, 50, 50, 50, 50, 50, 50,
-    50, 50, 50, 50, 50, 50, 50, 50, 50, 50,
-    50, 50, 50, 50, 50, 50, 50, 50, 50, 50,
-    50, 50, 50, 50, 50, 50, 50, 50, 50, 50,
+var timingDataMedium = [ // Now going to be slow
+        1000, 300, 100, 50,
+        50, 50, 50, 50, 50, 50, 50, 50, 50, 50,
+        50, 50, 50, 50, 50, 50, 50, 50, 50, 50,
+        50, 50, 50, 50, 50, 50, 50, 50, 50, 50,
+        50, 50, 50, 50, 50, 50, 50, 50, 50, 50,
+        50, 50, 50, 50, 50, 50, 50, 50, 50, 50,
+        50, 50, 50, 50, 50, 50, 50, 50, 50, 50
+];
+var timingData = [
+    [
+        400, 250, 100, 60, 50, 40,
+        30, 20, 10, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 30,
+    ],
+    [
+        1000, 300, 100, 50,
+        50, 50, 50, 50, 50, 50, 50, 50, 50, 50,
+        50, 50, 50, 50, 50, 50, 50, 50, 50, 50,
+        50, 50, 50, 50, 50, 50, 50, 50, 50, 50,
+        50, 50, 50, 50, 50, 50, 50, 50, 50, 50,
+        50, 50, 50, 50, 50, 50, 50, 50, 50, 50,
+        50, 50, 50, 50, 50, 50, 50, 50, 50, 50
+    ],
+    [
+        1000, 600, 300, 150,
+        120, 100, 80, 80, 80, 80, 80, 80, 80, 80,
+        80, 80, 80, 80, 80, 80, 80, 80, 80, 80,
+        80, 80, 80, 80, 80, 80, 80, 80, 80, 80,
+        80, 80, 80, 80, 80, 80, 80, 80, 80, 80,
+        80, 80, 80, 80, 80, 80, 80, 80, 80, 80,
+        80, 80, 80, 80, 80, 80, 80, 80, 80, 30
+    ]
 ];
 var totalComponents = 64;
 //var opposite = false;
@@ -58,7 +223,7 @@ function initializeBoolState() {
 
 function initializeLocations() {
     var LEFT = 15;
-    var TOP = 150;
+    var TOP = 140;
     for (var i = 0; i < 5; i++) {
         $("#row" + i).css({"top":((TOP-80) + i * 160)+"px"});
     }
@@ -136,7 +301,7 @@ function flipRepeat(x, component) {
     flip(component, timingDataMedium[x - 1]);
     setTimeout(function() {
         flipRepeat(x-1, component);
-    }, timingDataMedium[x - 1] + 20);
+    }, timingDataMedium[x - 1] + timingDataMedium[timingDataMedium.length - 1]);
 }
 
 function flip(component, s) {
@@ -190,6 +355,7 @@ function refactorWord(word) {
     for (var i = 0; i < inputChars.length; i++) {
         if (color) {
             switch (inputChars[i]) {
+                case "w":
                 case "r":
                 case "o":
                 case "y":
@@ -200,7 +366,8 @@ function refactorWord(word) {
                     color = false;
                     break;
                 default:
-                    alert("Not valid char after ~")
+                    console.log(inputChars[i]);
+                    break;
             }
         }
         else if (inputChars[i] == inputChars[i].toUpperCase()) {
@@ -229,10 +396,10 @@ function refactorNL(charArray) {
             while ((j + 1) % 16 != 0) {
                 j++;
             }
-            console.log("Nearest End: " + j);
-            console.log("Spaces NLB: " + newLinesBefore);
+            //console.log("Nearest End: " + j);
+            //console.log("Spaces NLB: " + newLinesBefore);
             var spaces = j - i + newLinesBefore;
-            console.log("Spaces between: " + spaces);
+            //console.log("Spaces between: " + spaces);
             for (var k = 0; k < spaces; k++) {
                 newChars.push(" ");
                 i++;
@@ -257,9 +424,9 @@ function displayWord(word) {
         letters.push(" ");
     }
     for (var i = 0; i < letters.length; i++) {
-        console.log("Letter: " + letters[i]);
+        //console.log("Letter: " + letters[i]);
         var locations = SLMap.get(letters[i]);
-        console.log("Location: " + locations[0] + " " + locations[1]);
+        //console.log("Location: " + locations[0] + " " + locations[1]);
         var r = (globalFlipBoardState[i].length / 2) - (globalFlipBoardState[i].indexOf(locations[0]) / 2) - 1;
         flipRepeat(r, i);
     }
@@ -293,6 +460,12 @@ document.addEventListener("click", function(event){
         }
     }
 });
+document.addEventListener("keyup", function(event) {
+    if (event.code === "Enter") {
+        handleCryptButton()
+    }
+});
 document.addEventListener("DOMContentLoaded", function() {
     initializeBoard();
+    animateStartScreen();
 });
