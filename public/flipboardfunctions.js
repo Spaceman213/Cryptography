@@ -2,6 +2,7 @@
  * Encrypt/Decrypt Button 
  *   Starts main program functionality
  */
+var algorithmType = 1;
 function handleRandomButton() {
     var word = "";
     for (var i = 0; i < 64; i++) {
@@ -68,14 +69,30 @@ function handleWaveButton() {
         animateClearWave(0);
     }
 }
+function caesarCipher(text, shift) {
+    if (shift >= 26) {
+        alert("Shift is too great for CC");
+    }
+    text = text.toUpperCase();
+    var encrypt_text = "";
+    for(let i = 0; i < text.length; i++) {
+        var newIndex = characterList.indexOf(text[i])-shift;
+        if (newIndex <= 6) {
+            newIndex = characterList.length - 1 - (newIndex - 6);
+        }
+        console.log(newIndex);
+        encrypt_text += characterList[newIndex];
+    }
+    return encrypt_text;
+}
 
 function handleCryptButton() {
-    //$("#Title-Button").html("Test!");
     var textInput = document.getElementById("Message-Text-Box").value;
-    var newText = "";
+    var newText = textInput;
     switch(algorithmType) {
         case 1:
-            newText = caesarCipher(textInput, 3);
+            newText = caesarCipher(textInput, 1);
+            displayWord(textInput);
             break;
         case 2:
             break;
@@ -85,9 +102,9 @@ function handleCryptButton() {
             alert("Error in switch case");
             break;
     }
-    displayWord(textInput);
-    // Update new Text
-    //document.getElementById("hello").innerHTML = newText;
+    setTimeout(function() {
+        displayWord(newText);
+    }, 7000);
 }
 function handleEnterTestClick() {
     if (startUp) {
@@ -416,6 +433,9 @@ function refactorNL(charArray) {
 function displayWord(word) {
     var letters;
     letters = refactorWord(word);
+    if (letters.length <= 32) {
+        letters.unshift("|");
+    }
     letters = refactorNL(letters);
     if (letters.length > totalComponents) {
         alert("Word is too long");
@@ -467,5 +487,5 @@ document.addEventListener("keyup", function(event) {
 });
 document.addEventListener("DOMContentLoaded", function() {
     initializeBoard();
-    animateStartScreen();
+    //animateStartScreen();
 });
