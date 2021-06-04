@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src = "browserfunctions.js"></script>
   <script src = "flipboardfunctions.js"></script>
   <head>
     <link rel = "stylesheet" type = "text/css" href = "top-ribbon-style.css"></link>
@@ -21,13 +20,6 @@
             <li><a href = "#" class = "Algorithm-Dropdown" onclick="handleHCclick()">Homophonic Cipher</a></li>
           </ul>
         </li>
-        <li><a href = "#" id = "Speed-Button" onclick="handleSpeedDropdown()">Speed: Fast</a>
-          <ul id = "Speed-Dropdown-Container">
-            <li><a href = "#" class = "Speed-Dropdown" onclick="handleSFclick()">Fast</a></li>
-            <li><a href = "#" class = "Speed-Dropdown" onclick="handleSMclick()">Medium</a></li>
-            <li><a href = "#" class = "Speed-Dropdown" onclick="handleSSclick()">Slow</a></li>
-          </ul>
-        </li>
         <li><a href = "#" id = "Crypt-Selection-Button" onclick="handleCryptDropdown()">Encrypt</a>
           <ul id = "Crypt-Dropdown-Container">
             <li><a href = "#" class = "Crypt-Dropdown" onclick="handleCEclick()">Encrypt</a></li>
@@ -40,13 +32,18 @@
         <button id = "Crypt-Button" onclick="handleCryptButton()">Encrypt!</button>
       </ul>
     </nav>
-    <div id = "flip-board"></div>
+    <div id = "Flip-Board"></div>
     <div id="Key-Help-Pop-Up">No Algorithm Selected</div>
     <div id = "Bottom-Ribbon"></div>
-    <button id = "Wave-Button" onclick = "handleWaveButton()">Wave</button>
-    <button id = "Table-Button" onclick = "handleTableButton()">Table</button>
-    <button id = "Test-Button" onclick = "handleTestButton()">Test</button>
-    <button id = "Clear-Button" onclick = "handleClearButton()">Clear</button>
-    <button id = "Random-Button" onclick = "handleRandomButton()">Random</button>
+    <button id = "Clear-Button" class = "ribbon-button" onclick = "handleClearButton()">Clear</button>
+    <button id = "Random-Button" class = "ribbon-button" onclick = "handleRandomButton()">Random</button>
+    <button id = "All-Button" class = "ribbon-button" onclick = "handleAllButton()">All</button>
+    <button id = "Hello-World-Button" class = "ribbon-button" onclick = "handleHelloWorldButton()">Hello World</button>
+    <button id = "Pi-Button" class = "ribbon-button" onclick = "handlePiButton()">π</button>
+
+    <button id = "Wave-Button" class = "ribbon-button" onclick = "handleWaveButton()">Wave</button>
+    <button id = "Checker-Button" class = "ribbon-button" onclick = "handleCheckerButton()">Checker</button>
+
+    <button id = "Help-Button" class = "ribbon-button" onclick = "handleWaveButton()">Help</button>
   </body>
 </html>

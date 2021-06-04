@@ -8,7 +8,6 @@
     width: 60px;
     height: 40px;
     background-image: url("./character-images/symbolSpriteSheet.png");
-    /*background-position: 0px;*/
     background-size: cover;
 }
 
@@ -21,8 +20,8 @@
 }
 .board-column {
     width: 30px;
-    height: 640px;
+    height: 720px;
     background-color: #222222;
     position: absolute;
-    z-index: 5;
+    z-index: 0;
 }
