@@ -6,4 +6,4 @@ A key text box is used for specifying a key to encrypt with. IF DECRYPTING, the 
 
 To run, use command `$ npm start`
 
-![Screen Shot 2021-08-31 at 3 01 31 PM](https://user-images.githubusercontent.com/73033227/131568211-05e3ae7b-f40c-4ff1-add3-b3f5d26bdadc.png)
+![Screen Shot 2021-09-09 at 9 56 12 PM](https://user-images.githubusercontent.com/73033227/132792150-ec7b9710-49fa-438c-bc59-d152d525be4e.png)
