@@ -1,19 +1,13 @@
 import React, { Fragment } from "react";
 
-function BoardRow(props) {
-  return (
-    <div id = {props.id} className = "board-row"></div>
-  );
-}
-function BoardColumn(props) {
-  return (
-    <div id = {props.id} className = "board-column"></div>
-  );
-}
-
 function FlipSquare(props) {
   return(
     <div className = "flip-square" id = {props.id}></div>
+  );
+}
+function BoardRow(props) {
+  return (
+    <div id = {props.id} className = "board-row"></div>
   );
 }
 
@@ -90,15 +84,12 @@ class FlipBoard extends React.Component {
       />
     )
   }
-  renderBoardColumn(num) {
-    var id = "col" + num;
-    return (
-      <BoardColumn
-        id = {id}
-      />
+  renderFlipBackground() {
+    return(
+      <div id = "Board-Background"></div>
     )
   }
-  render
+
   render() {
     return(
       <Fragment>
@@ -106,31 +97,12 @@ class FlipBoard extends React.Component {
         {this.renderFlipBoardRow(1)}
         {this.renderFlipBoardRow(2)}
         {this.renderFlipBoardRow(3)}
-
+        {this.renderFlipBackground()}
         {this.renderBoardRow(0)}
         {this.renderBoardRow(1)}
         {this.renderBoardRow(2)}
         {this.renderBoardRow(3)}
         {this.renderBoardRow(4)}
-
-        {this.renderBoardColumn(0)}
-        {this.renderBoardColumn(1)}
-        {this.renderBoardColumn(2)}
-        {this.renderBoardColumn(3)}
-        {this.renderBoardColumn(4)}
-        {this.renderBoardColumn(5)}
-        {this.renderBoardColumn(6)}
-        {this.renderBoardColumn(7)}
-        {this.renderBoardColumn(8)}
-        {this.renderBoardColumn(9)}
-        {this.renderBoardColumn(10)}
-        {this.renderBoardColumn(11)}
-        {this.renderBoardColumn(12)}
-        {this.renderBoardColumn(13)}
-        {this.renderBoardColumn(14)}
-        {this.renderBoardColumn(15)}
-        {this.renderBoardColumn(16)}
-        
       </Fragment>
     )
   }

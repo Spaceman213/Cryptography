@@ -1,16 +1,17 @@
-
 /* 
  * ================================================================|
  * Global Variables                                                |
  * ================================================================|
  */
 var algorithmType = 0;
+var algorithmEncrypt = true;
 var stackAnimating = [];
 var globalFlipBoardState = [];
 var SLMap = new Map();
 var startUp = true;
 var globalBoolState = [];
 var componentLocations = [];
+// Length is 65
 var characterList = [
     "p", "b", "g", "y", "o", "r", "w", "%", "?", ">", "<", ".", ",",
     "*", ":", ";", "=", "&", "+", "_", "-", "^", ")", "(", "$", "#",
@@ -18,18 +19,30 @@ var characterList = [
     "Y", "X", "W", "V", "U", "T", "S", "R", "Q", "P", "O", "N", "M",
     "L", "K", "J", "I", "H", "G", "F", "E", "D", "C", "B", "A", " "
 ];
+// Total time for the MAX FLIP is 2.00 seconds, total length is 64
 var timingDataMedium = [
-        1000, 300, 100, 50,
-        50, 50, 50, 50, 50, 50, 50, 50, 50, 50,
-        50, 50, 50, 50, 50, 50, 50, 50, 50, 50,
-        50, 50, 50, 50, 50, 50, 50, 50, 50, 50,
-        50, 50, 50, 50, 50, 50, 50, 50, 50, 50,
-        50, 50, 50, 50, 50, 50, 50, 50, 50, 50,
-        50, 50, 50, 50, 50, 50, 50, 50, 50, 50
+        400, 200, 100, 100,
+        20, 20, 20, 20, 20, 20, 20, 20, 20, 20,
+        20, 20, 20, 20, 20, 20, 20, 20, 20, 20,
+        20, 20, 20, 20, 20, 20, 20, 20, 20, 20,
+        20, 20, 20, 20, 20, 20, 20, 20, 20, 20,
+        20, 20, 20, 20, 20, 20, 20, 20, 20, 20,
+        20, 20, 20, 20, 20, 20, 20, 20, 20, 20
 ];
+var timingDataFast = [
+    230, 100, 50, 20,
+    5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+    5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+    5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+    5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+    5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+    5, 5, 5, 5, 5, 5, 5, 5, 5, 5
+];
+
 var totalComponents = 64;
 var speed = 1000;
-
+var globalKey;
+var waitToED;
 /* 
  * ================================================================|
  * Initializtion Methods                                           |
@@ -80,18 +93,19 @@ function initializeLocations() {
     }
     var LEFT = ((page_width - 1440) / 2) + 15;
     var TOP = (page_height - 720) / 2 + 80;
-    // Center the Board Rows
+    
     $("#row0").css({"top":"60px", "height" : (TOP - 60) + "px"});
     for (var i = 1; i < 4; i++) {
         $("#row" + i).css({"top":((TOP-80) + i * 160)+"px"});
     }
     $("#row4").css({"bottom":"45px", "height" : (TOP - 45) + "px"});
-    // Center the Board Columns
-    $("#col0").css({"top":(TOP-80)+"px", "left":"0px", "width": LEFT + "px"});
-    for (var i = 1; i < 16; i++) {
-        $("#col" + i).css({"top":(TOP-80)+"px", "left":((LEFT + 60) + 90 * (i - 1))+"px"});
-    }
-    $("#col16").css({"top":(TOP-80)+"px", "right":"0px", "width": LEFT + "px"});
+    $("#Board-Background").css({"height" : (page_height - 105) + "px"});
+
+    // Initialize the Key
+    $("#circle1").css({"left" : (page_width / 2) + "px"});
+    $("#circle2").css({"left" : (page_width / 2) + 15 + "px"});
+    $("#handle").css({"left" : (page_width / 2) - 76 + "px"});
+    $("#tooth").css({"left" : (page_width / 2) - 72 + "px"});
     // Set Locations of the actual Flip Components
     for (var r = 0; r < 4; r++) {
         for (var c = 0; c < 16; c++) {
@@ -230,20 +244,63 @@ function fullRefactorWord(word) {
     }
     return letters;
 }
-function displayWord(letters) {
+
+//Calculate the timing of the visualizer based on the flips
+function calculateWaitTime(flips, timingData) {
+    var total = 0;
+    for (i = 0; i < flips; i++) {
+        total += timingData[i] + timingData[i]/2;
+    }
+    total /= 1000;
+    return Math.ceil(total);
+}
+function clockCountdown(seconds) {
+    $("#clock-text").html(seconds);
+    if (seconds <= 0) {
+        return;
+    }  
+    setTimeout(function() {
+        clockCountdown(seconds - 1);
+    }, 1000);
+}
+
+// Displays the word on the screen by calling flips to the correct elements
+function displayWord(letters, timingData) {
+    var longestWait = 0;
     for (var i = 0; i < letters.length; i++) {
         var locations = SLMap.get(letters[i]);
         var r = (globalFlipBoardState[i].length / 2) - (globalFlipBoardState[i].indexOf(locations[0]) / 2) - 1;
-        flipRepeat(r, i);
+        
+        temp = calculateWaitTime(r, timingData);
+        if (temp > longestWait) {
+            longestWait = temp;
+        }
+        // r is how many times being flipped, i is component
+        flipRepeat(r, i, timingData);
     }
+    // If estimate time is less than 1 sec, show 1 instead of 0
+    clockCountdown(longestWait);
+    waitToED = longestWait * 1000;
 }
 /* 
  * ================================================================|
  * Animation Functions and Helper Methods                          |
  * ================================================================|
  */
-function animateStartScreen() {
-    var randomComponent = Math.floor(Math.random() * 64);
+function animateStartScreen(i) {
+    timeout = 5000;
+    if (i == 0) {
+        timeout = 3000;
+    }
+    d = new Date();
+    displayWord(fullRefactorWord(d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds()), timingDataFast);
+    setTimeout(function() {
+        if (startUp) {
+            animateStartScreen(i+1);
+        }
+    }, timeout);
+    return;
+    /*var randomComponent = Math.floor(Math.random() * 64);
     while (stackAnimating.indexOf(randomComponent) != -1) {
         randomComponent = Math.floor(Math.random() * 64);
     }
@@ -256,7 +313,7 @@ function animateStartScreen() {
         if (startUp) {
             animateStartScreen();
         }
-    }, 500);
+    }, 500);*/
 }
 
 function shiftSpritePosition(component) {
@@ -278,14 +335,15 @@ function shiftSpritePosition(component) {
         $("#FS_1_0_" + i).css({"background-position": globalFlipBoardState[i][globalFlipBoardState[i].length - 4]});
     }
 }
-function flipRepeat(x, component) {
+// timing data is going to be an array that is passed in
+function flipRepeat(x, component, timingData) {
     if (x <= 0) {
         return;
     }
-    flip(component, timingDataMedium[x - 1]);
+    flip(component, timingData[x - 1]);
     setTimeout(function() {
-        flipRepeat(x-1, component);
-    }, timingDataMedium[x - 1] + timingDataMedium[timingDataMedium.length - 1]);
+        flipRepeat(x-1, component, timingData);
+    }, timingData[x - 1] + (timingData[x - 1]/2) /*timingDataMedium[timingDataMedium.length - 1]*/);
 }
 
 function flip(component, s) {
@@ -323,19 +381,28 @@ var cipherCharacterList = [
     "M", "L", "K", "J", "I", "H", "G", "F", "E", "D", "C",
     "B", "A", " "
 ];
+var alphabet = [
+    "Z", "Y", "X", "W", "V", "U", "T", "S", "R", "Q", "P", "O", "N",
+    "M", "L", "K", "J", "I", "H", "G", "F", "E", "D", "C", "B", "A"
+];
+
+// Generates a random key based on what the algorithm selected is
 function createRandomKey() {
     var key = [];
     switch(algorithmType) {
+        // Creates a key for caesar cipher
         case 1:
-            key.push(Math.floor(Math.random() * 57) + 1);
+            key.push(Math.floor(Math.random() * 25) + 1);
             break;
+        // Creates a key for mono cipher
         case 2:
-            var shuffledCharList = copyArray(cipherCharacterList);
-            shuffleArray(shuffledCharList);
-            for (var i = 0; i < shuffledCharList.length; i++) {
-                key.push(shuffledCharList[i]);
+            var shuffledAlphabet = copyArray(alphabet);
+            shuffleArray(shuffledAlphabet);
+            for (var i = 0; i < shuffledAlphabet.length; i++) {
+                key.push(shuffledAlphabet[i]);
             }
             break;
+        // Creates a key for homo cipher
         case 3:
             break;  
         default:
@@ -362,34 +429,52 @@ function copyArray(array) {
 }
 
 // Returns the encrypted Caesar text
-function caesarCipher(text, shift) {
+function caesarCipherE(text, shift) {
     console.log("CC: " + text + " " + shift);
-    if (shift > 57) {
+    if (shift >= 26) {
         alert("Shift is too great for CC");
     }
     text = text.toUpperCase();
     var encrypt_text = "";
     for(let i = 0; i < text.length; i++) {
-        //console.log("Old index: " + cipherCharacterList.indexOf(text.charAt(i)));
-        var newIndex = cipherCharacterList.indexOf(text.charAt(i)) - shift;
-        if (newIndex < 0) {
-            newIndex += newIndex.length;
+        if (text.charAt(i) == ' ') {
+            encrypt_text += ' ';
         }
-        //console.log(newIndex);
-        encrypt_text += cipherCharacterList[newIndex];
+        else if (alphabet.indexOf(text.charAt(i)) == -1) {
+            alert("Only use letters in cipher");
+            return;
+        }
+        else {
+            var newIndex = alphabet.indexOf(text.charAt(i)) - shift;
+            if (newIndex < 0) {
+                newIndex += alphabet.length;
+            }
+            encrypt_text += alphabet[newIndex];
+        }
     }
     return encrypt_text;
 }
+function caesarCipherD(text, shift) {
+    return caesarCipherE(text, 26 - shift);
+}
 
 // Returns the encrypted Monoalphabetic text
-function monoCipher(text, key) {
+function monoCipherE(text, key) {
     console.log("MC: " + text + " " + key.toString());
     var encrypt_text = "";
     for (var i = 0; i < text.length; i++) {
-        var index = cipherCharacterList.indexOf(text.charAt(i));
+        var index = alphabet.indexOf(text.charAt(i));
         encrypt_text += key[index];
     }
     return encrypt_text;
+}
+function monoCipherD(text, key) {
+    var decrypt_text = "";
+    for (var i = 0; i < text.length; i++) {
+        var index = key.indexOf(text.charAt(i));
+        decrypt_text += alphabet[index];
+    }
+    return decrypt_text;
 }
 
 /* 
@@ -414,6 +499,12 @@ function handleAlgorithmDropdown() {
     } else {
         element.classList.remove("show-algo-dropdown");
     }
+}
+// Click on "Caesar Cipher" Dropdown button
+function handleNclick() {
+    algorithmType = 0;
+    document.getElementById("Key-Help-Pop-Up").innerHTML = "No Algorithm Selected";
+    document.getElementById("Crypt-Button").innerHTML = "Display!";
 }
 // Click on "Caesar Cipher" Dropdown button
 function handleCCclick() {
@@ -454,6 +545,7 @@ function handleCEclick() {
         var c = element.innerHTML.split(" ");
         element.innerHTML = "Encrypt " + c[1];
     }
+    algorithmEncrypt = true;
 }
 // "Decrypt" Button
 function handleCDclick() {
@@ -466,6 +558,7 @@ function handleCDclick() {
         var c = element.innerHTML.split(" ");
         element.innerHTML = "Decrypt " + c[1];
     }
+    algorithmEncrypt = false;
 }
 
 // Handle "?" Button, shows the pop-up for the help button
@@ -479,29 +572,54 @@ function handleKeyHelpButton() {
     }
 }
 
-// Handle the "Encrypt!" "Decrypt! Button
+/* 
+ * ================================================================|
+ * MAIN FUNCTION                                                   |
+ * ================================================================|
+ */
+// Handle the "Encrypt!" "Decrypt!" or "Display!" Button
 function handleCryptButton() {
+    // First grab input data
     var textInput = document.getElementById("Message-Text-Box").value;
+    globalKey = document.getElementById("Key-Text-Box").value;
+    // Check if user only wants to display
     if (algorithmType == 0) {
-        displayWord(fullRefactorWord(textInput));
+        displayWord(fullRefactorWord(textInput), timingDataMedium);
         return;
     }
+    // Refactor text
     if (textInput.indexOf("~") != -1) {
         alert("Cannot add color to encryption")
     }
     textInput = textInput.toUpperCase();
-    var key = document.getElementById("Key-Text-Box").value;
-    if (key == "Random") {
-        key = createRandomKey();
+    // Create key for decrypting
+    if (!algorithmEncrypt) {
+        if (globalKey == "random") {
+            alert("Not wise to decrypt message with random key");
+        }
+        else {
+            // Need to format key from user input
+        }
     }
+    // Create key for encrypting
+    if (algorithmEncrypt) {
+        if (globalKey == "random") {
+            globalKey = createRandomKey();
+        }
+        else {
+            // Need to format key from user input
+        }
+    }
+    // Display the original word
+    displayWord(fullRefactorWord(textInput), timingDataMedium);
+
     var newText = "";
-    displayWord(fullRefactorWord(textInput));
     switch(algorithmType) {
         case 1:
-            newText = caesarCipher(textInput, key[0]);
+            newText = (algorithmEncrypt) ? caesarCipherE(textInput, globalKey[0]) : caesarCipherD(textInput, globalKey[0]);
             break;
         case 2:
-            newText = monoCipher(textInput, key);
+            newText = (algorithmEncrypt) ? monoCipherE(textInput, globalKey) : monoCipherD(textInput, globalKey);
             break;
         case 3:
             break;  
@@ -509,9 +627,11 @@ function handleCryptButton() {
             alert("Error in switch case CB");
             break;
     }
+    //TODO
     setTimeout(function() {
-        displayWord(fullRefactorWord(newText));
-    }, 8000);
+        // Display the new encrypted word after period of time
+        displayWord(fullRefactorWord(newText), timingDataMedium);
+    }, waitToED + 1000);
 }
 
 // Handle Clear Button
@@ -520,10 +640,10 @@ function handleClearButton() {
         startUp = false;
         stackAnimating = [];
         setTimeout(function() {
-            displayWord(" ");
+            displayWord(fullRefactorWord(" "), timingDataMedium);
         }, 8000);
     } else {
-        displayWord(" ");
+        displayWord(fullRefactorWord(" "), timingDataMedium);
     }
 }
 
@@ -543,10 +663,10 @@ function handleRandomButton() {
         startUp = false;
         stackAnimating = [];
         setTimeout(function() {
-            displayWord(word);
+            displayWord(fullRefactorWord(word), timingDataMedium);
         }, 8000);
     } else {
-        displayWord(word);
+        displayWord(fullRefactorWord(word), timingDataMedium);
     }
 }
 
@@ -556,10 +676,10 @@ function handleAllButton() {
         startUp = false;
         stackAnimating = [];
         setTimeout(function() {
-            displayWord("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$()^-_+=;:*,.<>?%~w~r~o~y~g~b~p");
+            displayWord(fullRefactorWord("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$()^-_+=;:*,.<>?%~w~r~o~y~g~b~p"), timingDataMedium);
         }, 8000);
     } else {
-        displayWord("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$()^-_+=;:*,.<>?%~w~r~o~y~g~b~p");
+        displayWord(fullRefactorWord("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$()^-_+=;:*,.<>?%~w~r~o~y~g~b~p"), timingDataMedium);
     }
 }
 
@@ -569,10 +689,10 @@ function handleHelloWorldButton() {
         startUp = false;
         stackAnimating = [];
         setTimeout(function() {
-            displayWord("  HELLO WORLD,   THIS IS A TEST");
+            displayWord(fullRefactorWord("  HELLO WORLD,   THIS IS A TEST"), timingDataMedium);
         }, 8000);
     } else {
-        displayWord("  HELLO WORLD,   THIS IS A TEST");
+        displayWord(fullRefactorWord("  HELLO WORLD,   THIS IS A TEST"), timingDataMedium);
     }
 }
 
@@ -582,10 +702,10 @@ function handlePiButton() {
         startUp = false;
         stackAnimating = [];
         setTimeout(function() {
-            displayWord("3.14159265358979323846264338327950288419716939937510582097494459");
+            displayWord(fullRefactorWord("3.14159265358979323846264338327950288419716939937510582097494459"), timingDataMedium);
         }, 8000);
     } else {
-        displayWord("3.14159265358979323846264338327950288419716939937510582097494459");
+        displayWord(fullRefactorWord("3.14159265358979323846264338327950288419716939937510582097494459"), timingDataMedium);
     }
 }
 
@@ -607,7 +727,7 @@ function animateClearWave(component) {
         return;
     }
     //if (stackAnimating.indexOf(component) == -1) {
-    flipRepeat(65, component);
+    flipRepeat(65, component, timingDataMedium);
     setTimeout(function() {
         animateClearWave(component + 1);
     }, 50);
@@ -618,7 +738,7 @@ function handleCheckerButton() {
     var i = 0;
     for (var r = 0; r < 64; r+=16) {
         for (var c = r + i; c < r + 16; c+=2) {
-            flipRepeat(65, c);
+            flipRepeat(65, c, timingDataMedium);
             console.log("Flipping: " + c);
         }
         i = (i == 0) ? 1 : 0;
@@ -627,7 +747,7 @@ function handleCheckerButton() {
         i = 1;
         for (var r = 0; r < 64; r+=16) {
             for (var c = r + i; c < r + 16; c+=2) {
-                flipRepeat(65, c);
+                flipRepeat(65, c, timingDataMedium);
                 console.log("Flipping: " + c);
             }
             i = (i == 0) ? 1 : 0;
@@ -661,5 +781,9 @@ document.addEventListener("keyup", function(event) {
 });
 document.addEventListener("DOMContentLoaded", function() {
     initializeBoard();
-    //animateStartScreen();
+    //animateStartScreen(0);
+});
+window.addEventListener("resize", function() {
+    initializeLocations();
+    this.location.reload();
 });

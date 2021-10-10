@@ -222,11 +222,32 @@ nav ul li ul li a:hover{
 #Pi-Button {
     left: 350px;
 }
+
+#Key-Text-Box {
+    bottom: 10px;
+    position: absolute;
+    z-index: 7;
+    height: 6px;
+    left: 620px;
+    padding: 10px;
+    padding-right: 20px;
+    margin-top: 12px;
+    width: 150px;
+    border-radius: 6px;
+    outline: none;
+    border: none;
+    font-weight: 600;
+    color: #444444;
+    text-align: center;
+}
+
+
+
 #Wave-Button {
-    left: 500px;
+    left: 1000px;
 }
 #Checker-Button {
-    left: 572px;
+    left: 1072px;
 }
 #Help-Button {
     right: 10px;
